@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: 1build-ui
+
+server:
+  port: 0
+
+onebuild:
+  ui:
+    index:
+      main-component: Search
+    components:
+      path: /app/components
+      source-path: /app/modules
+      list:
+        Search:
+          home: /search
+          name: search

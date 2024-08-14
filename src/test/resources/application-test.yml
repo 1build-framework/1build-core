@@ -1,0 +1,15 @@
+onebuild:
+  ui:
+    components:
+      enabled: true
+      path: /app/components
+      source-path: /app/modules
+      list:
+        App:
+          home: /app
+          name: app
+        About:
+          home: /about
+          name: about
+    index:
+      main-component: About

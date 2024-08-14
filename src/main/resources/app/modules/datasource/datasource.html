@@ -1,0 +1,37 @@
+<v-container id="datasourceContainer">
+  <v-form>
+    <v-select
+        id="databaseTypes"
+        name="databaseTypes"
+        data-test-id="databaseTypes"
+        v-model="databaseType"
+        :items="databaseTypes"
+        item-title="value"
+        item-value="id"
+        label="Database Type"
+        required
+    ></v-select>
+
+    <v-text-field
+        id="jdbcUrl"
+        v-model="jdbcUrl"
+        label="JDBC URL"
+        required
+    ></v-text-field>
+
+    <v-text-field
+        id="username"
+        v-model="username"
+        label="Username"
+        required
+    ></v-text-field>
+
+    <v-text-field
+        id="password"
+        v-model="password"
+        label="Password"
+        type="password"
+        required
+    ></v-text-field>
+  </v-form>
+</v-container>

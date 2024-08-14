@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: 1build-ui
+
+onebuild:
+  ui:
+    components:
+      path: /app/components
+      source-path: /app/modules
+      list:
+        DataSource:
+          home: /datasource
+          name: datasource
+
+    index:
+      main-component: DataSource

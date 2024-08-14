@@ -1,0 +1,16 @@
+<v-container>
+  <v-text-field
+      id="searchText"
+      v-model="searchText"
+      label="Search"
+      outlined
+  ></v-text-field>
+  <v-btn
+      id="searchButton"
+      :loading="isSearching"
+      @click="onSearch"
+      color="primary"
+  >
+    {{isSearching ? 'Searching...' : 'Go'}}
+  </v-btn>
+</v-container>

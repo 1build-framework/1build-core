@@ -1,0 +1,36 @@
+onebuild:
+  ui:
+    css:
+      path: /libs/css
+      source-path: /internal/ui/css
+      files:
+#        material: materialdesignicons-7.4.47.min.css
+        vuetify: vuetify-3.5.2.min.css
+        default: onebuild.css
+
+#    font:
+#      path: /libs/fonts
+#      source-path: /internal/ui/fonts
+
+    js:
+      path: /libs/js
+      source-path: /internal/ui/js
+      modules:
+        vuetify-esm: vue-3.4.19.esm-browser.js
+      javascript:
+        vue: vue-3.4.15.global.prod.js
+        vue-router: vue-router-4.2.5.js
+        vuetify: vuetify-3.5.2.min.js
+        default: onebuild.js
+
+    service:
+      path: /app/services
+      source-path: /app/services
+
+    components:
+    index:
+      path: /index.html
+      source-path: /internal/ui/templates
+      template-source-path: /internal/ui/templates
+      template: index.ftl
+
