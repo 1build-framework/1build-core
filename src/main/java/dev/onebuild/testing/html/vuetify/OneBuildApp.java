@@ -1,6 +1,6 @@
 package dev.onebuild.testing.html.vuetify;
 
-import dev.onebuild.testing.html.api.Document;
+import dev.onebuild.testing.html.api.AbstractApp;
 import dev.onebuild.testing.html.api.IdValue;
 import dev.onebuild.testing.html.api.MultiValueData;
 import lombok.extern.slf4j.Slf4j;
@@ -20,16 +20,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class OneBuildApp implements Document {
-  private final WebDriver driver;
+public class OneBuildApp extends AbstractApp {
   private String debugFolder;
 
   public OneBuildApp(String url, String debugFolder, WebDriver driver) {
-    this.driver = driver;
+    super(driver);
     this.debugFolder = debugFolder;
     create(url);
   }
@@ -43,51 +44,8 @@ public class OneBuildApp implements Document {
     log.debug("Current URL: " + driver.getCurrentUrl());
 
     takeScreenshot("READY");
+
     savePageSource();
-  }
-
-  @Override
-  public boolean exists(String id) {
-    return driver.findElements(By.id(id)).size() > 0;
-  }
-
-  @Override
-  public void click(String id) {
-    takeScreenshot("BEFORE_CLICK_" + id);
-
-    WebElement element = driver.findElement(By.id(id));
-    if(element != null) {
-      element.click();
-      takeScreenshot("AFTER_CLICK_" + id);
-    } else {
-      log.warn("Element with id {} not found", id);
-    }
-  }
-
-  @Override
-  public void setValue(String id, String value) {
-    takeScreenshot("BEFORE_SET_" + id);
-
-    WebElement element = driver.findElement(By.id(id));
-    if(element != null) {
-      element.sendKeys(value);
-      takeScreenshot("AFTER_SET_" + id);
-    } else {
-      log.warn("Element with id {} not found", id);
-    }
-  }
-
-  @Override
-  public String getValue(String id) {
-    takeScreenshot("BEFORE_GET_" + id);
-
-    WebElement element = driver.findElement(By.id(id));
-    if(element != null) {
-      return element.getAttribute("value");
-    } else {
-      log.warn("Element with id {} not found", id);
-      return "";
-    }
   }
 
   @Override
@@ -95,24 +53,51 @@ public class OneBuildApp implements Document {
     List<IdValue> values = null;
     List<IdValue> selectedValues = null;
 
-    //String xpathExpression = "//div[@data-test-id='" + id + "']//ancestor::div[contains(@class, 'v-select')]";
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-    WebElement selectElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@data-test-id='" + id + "']")));
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+
+    //Parent find
+    WebElement selectElement = wait.until(ExpectedConditions
+        .presenceOfElementLocated(
+            By.xpath("//*[@id='" + id + "']/ancestor::*[2]")
+        )
+    );
+
+    //Perform click to render all options
     takeScreenshot("BEFORE_CLICK_" + id);
-    Actions actions = new Actions(driver);
-    actions.moveToElement(selectElement).click().perform();
+    selectElement.click();
+    //Actions actions = new Actions(driver);
+    //actions.moveToElement(selectElement).click().perform();
 
-    List<Map<String, String>> options = getAllOptions();
-
-    log.info("Options: {}", options);
-
-//    wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'v-list-item__title')]")));
+    //Wait for it to render
+    waitSeconds(3);
     takeScreenshot("AFTER_CLICK_" + id);
 
-    log.info("Select element: {}", selectElement);
+    //boolean found = searchTextNodeRecursive(selectElement, "PostgreSQL");
+
+    printElementDetails(selectElement);
+//contains(text(), 'PostgreSQL') or @label='PostgreSQL' or
+    List<WebElement> optionElements = selectElement.findElements(By.xpath("//*[@class='v-list-item-title']/ancestor::*[1]"));
+
+    optionElements.forEach(optionElement -> {
+      log.info("Found: {} {} {}", optionElement.getTagName(), optionElement.getAttribute("id"), optionElement.getText());
+
+      Map<String, Object> attrs = getElementAttributes(driver, optionElement);
+      attrs.forEach((key, value) -> {
+        log.info("Potential Option Key: {}, Value: {}", key, value);
+      });
+
+    });
+    /*WebElement optionElement = wait.until(ExpectedConditions
+        .presenceOfElementLocated(
+            By.xpath("//*[@label='PostgreSQL' or contains(text(), 'PostgreSQL')]")
+        )
+    );*/
+
+
+//    log.info("Found: {} {} {}", optionElement.getTagName(), optionElement.getAttribute("id"), optionElement.getText());
 
 //    values = map(optionElements);
-    selectElement.click();
+    //optionElement.click();
 
     return MultiValueData.builder()
         .values(values)
@@ -120,7 +105,25 @@ public class OneBuildApp implements Document {
         .build();
   }
 
+  private boolean searchTextNodeRecursive(WebElement element, String text) {
+    if (element.getText().contains(text)) {
+      return true;
+    }
+    List<WebElement> children = element.findElements(By.xpath("./*"));
+    for (WebElement child : children) {
+      log.info("Option Tag {}, Text: {}", child.getTagName(), child.getText());
+      if (searchTextNodeRecursive(child, text)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private List<Map<String, String>> getAllOptions() {
+    return Collections.emptyList();
+  }
+
+  /*private List<Map<String, String>> getAllOptions() {
     JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
 
     // Execute the JavaScript and get the options
@@ -149,17 +152,7 @@ public class OneBuildApp implements Document {
     }
 
     return options;
-  }
-
-  private void waitSeconds(int seconds) {
-    try {
-      WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(seconds));
-      wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'v-list-item__title')]")));
-//      wait.wait();
-    } catch(Exception e) {
-      log.error("Failed to wait for {} seconds", seconds, e);
-    }
-  }
+  }*/
 
   private List<IdValue> map(List<WebElement> optionElements) {
     List<IdValue> values = new ArrayList<>();
