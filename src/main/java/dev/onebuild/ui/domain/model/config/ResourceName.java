@@ -1,4 +1,4 @@
-package dev.onebuild.ui.config.model;
+package dev.onebuild.ui.domain.model.config;
 
 public enum ResourceName {
   DEFAULT("default"),

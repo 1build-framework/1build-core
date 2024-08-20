@@ -1,12 +1,7 @@
 "use strict"
 class DatasourceService {
   getDatabaseTypes() {
-    return [
-      { id: 'PostgreSQL', value: 'PostgreSQL' },
-      { id: 'Oracle', value: 'Oracle' },
-      { id: 'MS-SQL-Server', value: 'MS SQL Server' },
-      { id: 'My-SQL', value: 'My SQL Test' }
-    ];
+    return ${databaseTypes};
   }
 }
 

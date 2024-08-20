@@ -1,4 +1,4 @@
-package dev.onebuild.ui.config.model;
+package dev.onebuild.ui.domain.model.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,10 +12,8 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Configuration
-@ConfigurationProperties(prefix = "onebuild.ui.components")
-public class ComponentsConfigs {
+public class CssConfigs {
   private String path;
   private String sourcePath;
-  private Map<String, ComponentConfigs> list = new HashMap<>();
+  private Map<String, String> files = new HashMap<>();
 }

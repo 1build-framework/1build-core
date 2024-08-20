@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
@@ -19,6 +21,10 @@ public abstract class AbstractBrowserTest {
 
   @LocalServerPort
   private int port;
+
+  @Autowired
+  @Qualifier("scriptParameters")
+  private Map<String, Object> scriptParameters;
 
   private BrowserWebDriverContainer<?> browserContainer;
 
@@ -49,6 +55,18 @@ public abstract class AbstractBrowserTest {
 
   protected void afterEach() {
 
+  }
+
+  protected void setData(String id, Object value) {
+    scriptParameters.put(id, value);
+  }
+
+  protected void clearData() {
+    scriptParameters.clear();
+  }
+
+  protected void removeData(String id) {
+    scriptParameters.remove(id);
   }
 
   @AfterEach

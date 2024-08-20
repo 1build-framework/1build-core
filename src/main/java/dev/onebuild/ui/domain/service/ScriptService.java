@@ -1,56 +1,51 @@
 package dev.onebuild.ui.domain.service;
 
-import dev.onebuild.ui.config.model.*;
+import dev.onebuild.ui.domain.model.config.OneBuildConfigs;
+import dev.onebuild.ui.domain.model.config.ScriptParameters;
+import dev.onebuild.ui.domain.model.config.UiComponent;
+import freemarker.core.InvalidReferenceException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.StringWriter;
 import java.util.Map;
 
 import static dev.onebuild.ui.utils.ResourceUtils.readResource;
 
+@Slf4j
 public class ScriptService {
-  private final CssConfigs cssConfigs;
-  private final JsConfigs jsConfigs;
-  private final ComponentsConfigs componentsConfigs;
-  private final IndexConfigs indexConfigs;
+  private final OneBuildConfigs oneBuildConfigs;
   private final freemarker.template.Configuration freemarkerConfiguration;
+  private final ScriptParameters scriptParameters;
 
-  public ScriptService(CssConfigs cssConfigs,
-                       JsConfigs jsConfigs,
-                       ComponentsConfigs componentsConfigs,
-                       IndexConfigs indexConfigs,
-                       freemarker.template.Configuration freemarkerConfiguration) {
-    this.cssConfigs = cssConfigs;
-    this.jsConfigs = jsConfigs;
-    this.componentsConfigs = componentsConfigs;
-    this.indexConfigs = indexConfigs;
+  public ScriptService(OneBuildConfigs oneBuildConfigs,
+                       freemarker.template.Configuration freemarkerConfiguration,
+                       ScriptParameters scriptParameters) {
+    this.oneBuildConfigs = oneBuildConfigs;
     this.freemarkerConfiguration = freemarkerConfiguration;
+    this.scriptParameters = scriptParameters;
   }
 
   public String renderIndex() {
     StringWriter writer = new StringWriter();
 
-    String mainComponentName = indexConfigs.getMainComponent();
+    String mainComponentName = oneBuildConfigs.getIndex().getMainComponent();
 
-    ComponentConfigs cp = componentsConfigs.getList().get(mainComponentName);
-
-    /*Optional<Map.Entry<String, ComponentConfigs>> cp = componentsConfigs.getList()
-        .entrySet()
-        .stream()
-        .filter((e) -> e.getValue().isMain())
-        .findFirst();*/
+    UiComponent cp = oneBuildConfigs.getComponents().getList().get(mainComponentName);
 
     if(cp != null) {
-      String importPath = componentsConfigs.getPath() + "/" + mainComponentName;
+      String importPath = oneBuildConfigs.getComponents().getPath() + "/" + mainComponentName;
 
-      Map<String, Object> model = Map.of(
-          "cssConfig", cssConfigs,
-          "jsConfig", jsConfigs,
+
+      Map<String, Object> model = scriptParameters.getAllParameters();
+      model.putAll(Map.of(
+          "cssConfig", oneBuildConfigs.getCss(),
+          "jsConfig", oneBuildConfigs.getJs(),
           "componentImportPath", importPath
-      );
+      ));
 
       try {
         freemarkerConfiguration
-            .getTemplate(indexConfigs.getTemplate())
+            .getTemplate(oneBuildConfigs.getIndex().getTemplate())
             .process(model, writer);
       } catch (Exception e) {
         throw new RuntimeException("Failed to render index", e);
@@ -63,16 +58,15 @@ public class ScriptService {
   public String renderComponent(String componentName) {
     StringWriter writer = new StringWriter();
 
-    ComponentConfigs cp = componentsConfigs.getList().get(componentName);
-    String resourcePath = componentsConfigs.getSourcePath() + "/" +
+    UiComponent cp = oneBuildConfigs.getComponents().getList().get(componentName);
+    String resourcePath = oneBuildConfigs.getComponents().getSourcePath() + "/" +
         cp.getHome();
 
     String html = readResource(resourcePath, cp.getName() + ".html");
     String css = readResource(resourcePath, cp.getName() + ".css");
 
-    Map<String, Object> model = Map.of(
-        "html", html,
-        "css", css);
+    Map<String, Object> model = scriptParameters.getAllParameters();
+    model.putAll(Map.of("html", html, "css", css));
 
     try {
       freemarkerConfiguration
@@ -83,5 +77,23 @@ public class ScriptService {
     }
 
     return writer.toString();
+  }
+
+  public String renderService(String serviceName) {
+    StringWriter writer = new StringWriter();
+
+    try {
+      freemarkerConfiguration
+          .getTemplate(serviceName)
+          .process(scriptParameters.getAllParameters(), writer);
+      return writer.toString();
+    }  catch (InvalidReferenceException ire) {
+      String missingVariable = ire.getBlamedExpressionString();
+      log.error("Error: Missing data '{}' in the file '{}'", missingVariable, serviceName);
+    } catch (Exception e) {
+      log.error("Error: Unable to process template: ", e);
+    }
+
+    return "";
   }
 }
