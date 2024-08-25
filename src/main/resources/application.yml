@@ -1,26 +1,43 @@
+#### Scripts to download the UI dependencies
+
+#vue 3.4.38
+#wget --output-document=vue-prod-min-3.4.38.js https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.38/vue.global.prod.min.js --header="Accept-Charset: utf-8"
+
+#vue router 4.4.3
+#wget --output-document=vue-router-prod-min-4.4.3.js https://cdnjs.cloudflare.com/ajax/libs/vue-router/4.4.3/vue-router.global.prod.min.js --header="Accept-Charset: utf-8"
+
+#vuetify 3.7.0
+#wget --output-document=vuetify-prod-min-3.7.0.js https://cdnjs.cloudflare.com/ajax/libs/vuetify/3.7.0/vuetify.min.js --header="Accept-Charset: utf-8"
+#wget --output-document=vuetify-css-prod-min-3.7.0.css https://cdnjs.cloudflare.com/ajax/libs/vuetify/3.7.0/vuetify.min.css --header="Accept-Charset: utf-8"
+
+#pinia 2.2.2
+#wget --output-document=pinia-prod-min-2.2.2.js https://cdnjs.cloudflare.com/ajax/libs/pinia/2.2.2/pinia.iife.prod.min.js --header="Accept-Charset: utf-8"
+
+
 onebuild:
   ui:
     css:
       path: /libs/css
       source-path: /internal/ui/css
       files:
-#        material: materialdesignicons-7.4.47.min.css
-        vuetify: vuetify-3.5.2.min.css
+        vuetify: vuetify-css-prod-min-3.7.0.css
         default: onebuild.css
-
-#    font:
-#      path: /libs/fonts
-#      source-path: /internal/ui/fonts
 
     js:
       path: /libs/js
       source-path: /internal/ui/js
-      modules:
-        vuetify-esm: vue-3.4.19.esm-browser.js
+
+#      modules:
+#        vue: vue-esm-3.4.38-runtime.min.prod.js
+#        vue-router: vue-router-esm-4.4.3.min.prod.js
+#        vuetify: vuetify-esm-3.7.0-runtime.min.prod.js
+#        pinia: pinia-esm-min-2.2.2.min.prod.js
+
       javascript:
-        vue: vue-3.4.15.global.prod.js
-        vue-router: vue-router-4.2.5.js
-        vuetify: vuetify-3.5.2.min.js
+        vue: vue-prod-min-3.4.38.js
+        vue-router: vue-router-prod-min-4.4.3.js
+        vuetify: vuetify-prod-min-3.7.0.js
+        pinia: pinia-prod-min-2.2.2.js
         default: onebuild.js
 
     service:
@@ -33,4 +50,3 @@ onebuild:
       source-path: /internal/ui/templates
       template-source-path: /internal/ui/templates
       template: index.ftl
-

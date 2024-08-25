@@ -1,5 +1,9 @@
 "use strict"
 class DatasourceService {
+
+  /**
+   * @returns {{id: string, value: string}[]}
+   */
   getDatabaseTypes() {
     return ${databaseTypes};
   }

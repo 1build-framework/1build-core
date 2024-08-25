@@ -20,7 +20,7 @@ export default {
       console.log("databaseType loaded from service ", databaseType);
     });
 
-    console.log("datasourceTYpes loaded from service ", databaseTypes);
+    console.log("datasourceTypes loaded from service ", databaseTypes);
 
     return {
       databaseType,

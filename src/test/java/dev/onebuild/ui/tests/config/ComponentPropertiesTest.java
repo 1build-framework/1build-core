@@ -2,6 +2,7 @@ package dev.onebuild.ui.tests.config;
 
 import dev.onebuild.ui.domain.model.config.ComponentsConfigs;
 import dev.onebuild.ui.domain.model.config.IndexConfigs;
+import dev.onebuild.ui.domain.model.config.OneBuildConfigs;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,14 +14,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 public class ComponentPropertiesTest {
   private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ComponentPropertiesTest.class);
-  @Autowired
-  private ComponentsConfigs componentsConfigs;
 
   @Autowired
-  private IndexConfigs indexConfigs;
+  private OneBuildConfigs oneBuildConfigs;
 
   @Test
   public void testComponentsConfigProperties() {
+    ComponentsConfigs componentsConfigs = oneBuildConfigs.getComponents();
+    IndexConfigs indexConfigs = oneBuildConfigs.getIndex();
+
     assertNotNull(componentsConfigs);
     assertEquals("About", indexConfigs.getMainComponent());
     assertEquals("/app/components", componentsConfigs.getPath());

@@ -14,19 +14,11 @@ public class FrameworkPropertiesTest {
   private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(FrameworkPropertiesTest.class);
 
   @Autowired
-  private CssConfigs cssConfigs;
-
-  @Autowired
-  private JsConfigs jsConfigs;
-
-  @Autowired
-  private ComponentsConfigs componentsConfigs;
-
-  @Autowired
-  private IndexConfigs indexConfigs;
+  private OneBuildConfigs oneBuildConfigs;
 
   @Test
   public void testCssConfigProperties() {
+    CssConfigs cssConfigs = oneBuildConfigs.getCss();
     assertNotNull(cssConfigs);
     assertEquals("/libs/css", cssConfigs.getPath());
     assertEquals("/internal/ui/css", cssConfigs.getSourcePath());
@@ -37,6 +29,7 @@ public class FrameworkPropertiesTest {
 
   @Test
   public void testJsConfigProperties() {
+    JsConfigs jsConfigs = oneBuildConfigs.getJs();
     assertNotNull(jsConfigs);
     assertEquals("/libs/js", jsConfigs.getPath());
     assertEquals("/internal/ui/js", jsConfigs.getSourcePath());
@@ -45,11 +38,13 @@ public class FrameworkPropertiesTest {
     assertEquals("vue-router-4.2.5.js", jsConfigs.getJavascript().get(ResourceName.VUE_ROUTER.toString()));
     assertEquals("vuetify-3.5.2.min.js", jsConfigs.getJavascript().get(ResourceName.VUETIFY.toString()));
     assertEquals("vue-3.4.19.esm-browser.js", jsConfigs.getModules().get(ResourceName.VUETIFY_ESM.toString()));
+    assertEquals("pinia-2.1.4.prod.js", jsConfigs.getJavascript().get(ResourceName.PINIA.toString()));
     assertEquals("onebuild.js", jsConfigs.getJavascript().get(ResourceName.DEFAULT.toString()));
   }
 
   @Test
   public void testIndexConfigProperties() {
+    IndexConfigs indexConfigs = oneBuildConfigs.getIndex();
     assertNotNull(indexConfigs);
     assertEquals("/index.html", indexConfigs.getPath());
     assertEquals("/internal/ui/templates", indexConfigs.getSourcePath());

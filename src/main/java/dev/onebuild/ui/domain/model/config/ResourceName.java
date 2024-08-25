@@ -6,7 +6,8 @@ public enum ResourceName {
   VUE("vue"),
   VUE_ROUTER("vue-router"),
   VUETIFY("vuetify"),
-  VUETIFY_ESM("vuetify-esm");
+  VUETIFY_ESM("vuetify-esm"),
+  PINIA("pinia");
 
   private final String name;
 

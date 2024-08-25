@@ -8,14 +8,12 @@ import dev.onebuild.ui.config.TemplateConfiguration;
 import dev.onebuild.ui.domain.model.config.OneBuildConfigs;
 import dev.onebuild.ui.domain.model.config.ScriptParameters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 
 import java.util.List;
-import java.util.Map;
 
 @SpringBootApplication
 public class Application {

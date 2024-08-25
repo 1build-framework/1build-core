@@ -35,7 +35,6 @@ public class ScriptService {
     if(cp != null) {
       String importPath = oneBuildConfigs.getComponents().getPath() + "/" + mainComponentName;
 
-
       Map<String, Object> model = scriptParameters.getAllParameters();
       model.putAll(Map.of(
           "cssConfig", oneBuildConfigs.getCss(),
