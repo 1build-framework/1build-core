@@ -8,11 +8,10 @@ server:
 onebuild:
   ui:
     index:
-      main-component: Search
-    components:
+      main-component: search
+    component:
       path: /app/components
       source-path: /app/modules
       list:
-        Search:
+        search:
           home: /search
-          name: search

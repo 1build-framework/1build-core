@@ -9,30 +9,16 @@
   <title>Hello 1build (Spring Boot + Vue + Vuetify)</title>
   <!--link rel="icon" type="image/x-icon" href="favicon.ico"-->
 
-  <!-- Fonts -->
-  <@macros.importFonts/>
+  <@macros.materialFonts/>
 
-  <!-- Configured CSS -->
-  <@macros.generateCssLinks path=cssConfig.path files=cssConfig.files />
+  <@macros.cssTags path=cssConfig.path files=cssConfig.files />
 </head>
 
 <body>
 
-<@macros.generateJsLinks path=jsConfig.path files=jsConfig.javascript />
-<@macros.generateModuleLinks path=jsConfig.path files=jsConfig.modules />
+<@macros.scriptTags path=jsConfig.path scripts=jsConfig.javascript modules=jsConfig.modules/>
 
-<div id="app">
-</div>
-
-<script type="module">
-  import App from '${componentImportPath}';
-
-  window.app = Vue.createApp(App);
-  window.vuetify= Vuetify.createVuetify();
-  window.app.use(vuetify);
-  window.app.mount('#app');
-
-</script>
+<@macros.appScript/>
 
 </body>
 </html>

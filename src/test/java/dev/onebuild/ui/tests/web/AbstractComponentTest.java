@@ -1,6 +1,6 @@
 package dev.onebuild.ui.tests.web;
 
-import dev.onebuild.testing.html.vuetify.OneBuildApp;
+import dev.onebuild.testing.html.vuetify.Vuetify370App;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogType;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 public abstract class AbstractComponentTest {
   private BrowserWebDriverContainer<?> browserContainer;
-  protected OneBuildApp app;
+  protected Vuetify370App app;
 
   protected void openBrowser() {
     var chromeOptions = new ChromeOptions();
@@ -22,7 +22,7 @@ public abstract class AbstractComponentTest {
     browserContainer.start();
     WebDriver driver = browserContainer.getWebDriver();
 
-    app = new OneBuildApp(
+    app = new Vuetify370App(
         "http://host.docker.internal:" + getPort() + getHomePageUrl(),
         getDebugFolder(),
         driver);

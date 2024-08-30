@@ -4,13 +4,18 @@ spring:
 
 onebuild:
   ui:
-    components:
+    component:
       path: /app/components
       source-path: /app/modules
       list:
-        DataSource:
+        datasource:
           home: /datasource
-          name: datasource
+        version:
+          home: /version
+
+    store:
+      path: /app/stores
+      source-path: /app/stores
 
     index:
-      main-component: DataSource
+      main-component: version

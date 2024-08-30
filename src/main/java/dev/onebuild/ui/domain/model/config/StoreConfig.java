@@ -4,14 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ComponentsConfigs {
+public class StoreConfig {
   private String path;
   private String sourcePath;
-  private Map<String, UiComponent> list = new HashMap<>();
 }

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IndexConfigs {
+public class IndexConfig {
   private String path;
   private String sourcePath;
   private String templateSourcePath;

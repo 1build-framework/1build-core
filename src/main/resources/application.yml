@@ -1,26 +1,32 @@
 #### Scripts to download the UI dependencies
 
 #vue 3.4.38
-#wget --output-document=vue-prod-min-3.4.38.js https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.38/vue.global.prod.min.js --header="Accept-Charset: utf-8"
+#wget --output-document=vue-3.4.38.js https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.38/vue.global.prod.min.js --header="Accept-Charset: utf-8"
+#wget --output-document=vue-3.4.38.dev.js https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.38/vue.global.min.js --header="Accept-Charset: utf-8"
 
 #vue router 4.4.3
-#wget --output-document=vue-router-prod-min-4.4.3.js https://cdnjs.cloudflare.com/ajax/libs/vue-router/4.4.3/vue-router.global.prod.min.js --header="Accept-Charset: utf-8"
+#wget --output-document=vue-router-4.4.3.js https://cdnjs.cloudflare.com/ajax/libs/vue-router/4.4.3/vue-router.global.prod.min.js --header="Accept-Charset: utf-8"
 
 #vuetify 3.7.0
-#wget --output-document=vuetify-prod-min-3.7.0.js https://cdnjs.cloudflare.com/ajax/libs/vuetify/3.7.0/vuetify.min.js --header="Accept-Charset: utf-8"
-#wget --output-document=vuetify-css-prod-min-3.7.0.css https://cdnjs.cloudflare.com/ajax/libs/vuetify/3.7.0/vuetify.min.css --header="Accept-Charset: utf-8"
+#wget --output-document=vuetify-3.7.0.js https://cdnjs.cloudflare.com/ajax/libs/vuetify/3.7.0/vuetify.min.js --header="Accept-Charset: utf-8"
+#wget --output-document=vuetify-3.7.0.dev.js https://cdnjs.cloudflare.com/ajax/libs/vuetify/3.7.0/vuetify-labs.min.js --header="Accept-Charset: utf-8"
+
+#wget --output-document=vuetify-css-3.7.0.css https://cdnjs.cloudflare.com/ajax/libs/vuetify/3.7.0/vuetify.min.css --header="Accept-Charset: utf-8"
 
 #pinia 2.2.2
-#wget --output-document=pinia-prod-min-2.2.2.js https://cdnjs.cloudflare.com/ajax/libs/pinia/2.2.2/pinia.iife.prod.min.js --header="Accept-Charset: utf-8"
+#wget --output-document=pinia-2.2.2.js https://cdnjs.cloudflare.com/ajax/libs/pinia/2.2.2/pinia.iife.prod.min.js --header="Accept-Charset: utf-8"
 
-
+#vuedemi 0.14.10
+#wget --output-document=vuedemi-2.2.2.js https://cdnjs.cloudflare.com/ajax/libs/vue-demi/0.14.10/index.iife.min.js --header="Accept-Charset: utf-8"
 onebuild:
+  prod-enabled: false
+
   ui:
     css:
       path: /libs/css
       source-path: /internal/ui/css
       files:
-        vuetify: vuetify-css-prod-min-3.7.0.css
+        vuetify: vuetify-css-3.7.0.css
         default: onebuild.css
 
     js:
@@ -34,17 +40,20 @@ onebuild:
 #        pinia: pinia-esm-min-2.2.2.min.prod.js
 
       javascript:
-        vue: vue-prod-min-3.4.38.js
-        vue-router: vue-router-prod-min-4.4.3.js
-        vuetify: vuetify-prod-min-3.7.0.js
-        pinia: pinia-prod-min-2.2.2.js
-        default: onebuild.js
+        vue: vue-3.4.38.js
+        vuedemi: vuedemi-2.2.2.js
+        vue-router: vue-router-4.4.3.js
+        vuetify: vuetify-3.7.0.js
+        pinia: pinia-2.2.2.js
 
     service:
       path: /app/services
       source-path: /app/services
 
-    components:
+    store:
+      path: /app/stores
+      source-path: /app/stores
+
     index:
       path: /index.html
       source-path: /internal/ui/templates

@@ -13,18 +13,11 @@ import java.util.Collections;
 import java.util.List;
 
 @Slf4j
-public class OneBuildApp extends AbstractApp {
+public class Vuetify370App extends AbstractApp {
 
-  public OneBuildApp(String url, String debugFolder, WebDriver driver) {
+  public Vuetify370App(String url, String debugFolder, WebDriver driver) {
     super(debugFolder, driver);
     create(url);
-  }
-
-  private void create(String url) {
-    driver.get(url);
-    log.debug("Current URL: " + driver.getCurrentUrl());
-    takeScreenshot("READY");
-    savePageSource();
   }
 
   @Override

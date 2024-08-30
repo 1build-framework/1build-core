@@ -1,8 +1,8 @@
 package dev.onebuild.ui.tests.config;
 
-import dev.onebuild.ui.domain.model.config.ComponentsConfigs;
-import dev.onebuild.ui.domain.model.config.IndexConfigs;
-import dev.onebuild.ui.domain.model.config.OneBuildConfigs;
+import dev.onebuild.ui.domain.model.config.ComponentsConfig;
+import dev.onebuild.ui.domain.model.config.IndexConfig;
+import dev.onebuild.ui.domain.model.config.OneBuildUiConfigs;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,25 +16,23 @@ public class ComponentPropertiesTest {
   private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ComponentPropertiesTest.class);
 
   @Autowired
-  private OneBuildConfigs oneBuildConfigs;
+  private OneBuildUiConfigs oneBuildUiConfigs;
 
   @Test
   public void testComponentsConfigProperties() {
-    ComponentsConfigs componentsConfigs = oneBuildConfigs.getComponents();
-    IndexConfigs indexConfigs = oneBuildConfigs.getIndex();
+    ComponentsConfig componentsConfig = oneBuildUiConfigs.getComponent();
+    IndexConfig indexConfig = oneBuildUiConfigs.getIndex();
 
-    assertNotNull(componentsConfigs);
-    assertEquals("About", indexConfigs.getMainComponent());
-    assertEquals("/app/components", componentsConfigs.getPath());
-    assertEquals("/app/modules", componentsConfigs.getSourcePath());
-    assertEquals(2, componentsConfigs.getList().size());
+    assertNotNull(componentsConfig);
+    assertEquals("about", indexConfig.getMainComponent());
+    assertEquals("/app/components", componentsConfig.getPath());
+    assertEquals("/app/modules", componentsConfig.getSourcePath());
+    assertEquals(2, componentsConfig.getList().size());
 
-    var app = componentsConfigs.getList().get("App");
+    var app = componentsConfig.getList().get("app");
     assertEquals("/app", app.getHome());
-    assertEquals("app", app.getName());
 
-    var about = componentsConfigs.getList().get("About");
+    var about = componentsConfig.getList().get("about");
     assertEquals("/about", about.getHome());
-    assertEquals("about", about.getName());
   }
 }

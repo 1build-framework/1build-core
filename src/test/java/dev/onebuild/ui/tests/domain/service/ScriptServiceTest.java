@@ -29,23 +29,21 @@ public class ScriptServiceTest {
 
     //css
     assertTrue(page.contains("/public/css/materialdesignicons.css"));
-    assertTrue(page.contains("/libs/css/vuetify-3.5.2.min.css"));
+    assertTrue(page.contains("/libs/css/vuetify-css-3.7.0.css"));
     assertTrue(page.contains("/libs/css/onebuild.css"));
 
     //js
-    assertTrue(page.contains("/libs/js/vue-3.4.15.global.prod.js"));
-    assertTrue(page.contains("/libs/js/vue-router-4.2.5.js"));
-    assertTrue(page.contains("/libs/js/vuetify-3.5.2.min.js"));
-    assertTrue(page.contains("/libs/js/vue-3.4.19.esm-browser.js"));
-    assertTrue(page.contains("/libs/js/onebuild.js"));
+    assertTrue(page.contains("/libs/js/vue-3.4.38.js"));
+    assertTrue(page.contains("/libs/js/vue-router-4.4.3.js"));
+    assertTrue(page.contains("/libs/js/vuetify-3.7.0.js"));
 
     //Import
-    assertTrue(page.contains("/app/components/About"));
+    assertTrue(page.contains("/app/components/about"));
   }
 
   @Test
   public void whenComponentIsCalled_itGeneratesTheScript() {
-    String componentScript = scriptService.renderComponent("App");
+    String componentScript = scriptService.renderComponent("app");
     assertNotNull(componentScript);
     log.info("Page generated \n" + componentScript);
 

@@ -85,11 +85,6 @@ public class DataSourceComponentTest extends AbstractComponentTest {
     assertEquals("", app.getInputValue("password"));
   }
 
-  @Test
-  @Disabled
-  public void whenDatasourceInfoIsEnteredForPG_itSavesTheData() {
-  }
-
   protected String getDebugFolder() {
     return "/Users/msabir/development/projects/1build-projects/1build-ui/src/test/resources/debug";
   }

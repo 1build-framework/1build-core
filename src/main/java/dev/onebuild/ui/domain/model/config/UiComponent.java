@@ -9,5 +9,4 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UiComponent {
   private String home;
-  private String name;
 }

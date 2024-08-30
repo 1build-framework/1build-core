@@ -28,6 +28,13 @@ public abstract class AbstractApp implements BrowserApp {
     this.driver = driver;
   }
 
+  protected void create(String url) {
+    driver.get(url);
+    log.debug("Current URL: " + driver.getCurrentUrl());
+    takeScreenshot("READY");
+    savePageSource();
+  }
+
   @Override
   public boolean exists(String id) {
     return !driver.findElements(By.id(id)).isEmpty();
