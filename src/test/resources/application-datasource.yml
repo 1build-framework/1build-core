@@ -8,7 +8,7 @@ server:
 onebuild:
   ui:
     index:
-      main-component: dataSource
+      main-component: datasource
 
     component:
       path: /app/components

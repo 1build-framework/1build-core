@@ -1,20 +1,19 @@
 package dev.onebuild.ui.tests.web.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.onebuild.testing.html.api.IdValue;
-import dev.onebuild.testing.html.api.MultiValueData;
+import dev.onebuild.qa.html.api.BrowserApp;
+import dev.onebuild.qa.html.api.IdValue;
+import dev.onebuild.qa.html.api.MultiValueData;
+import dev.onebuild.qa.html.vuetify.BrowserAppFactory;
 import dev.onebuild.ui.domain.model.config.ScriptParameters;
-import dev.onebuild.ui.tests.web.AbstractComponentTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-public class DataSourceComponentTest extends AbstractComponentTest {
+public class DataSourceComponentTest {
   private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DataSourceComponentTest.class);
 
   @LocalServerPort
@@ -33,6 +32,8 @@ public class DataSourceComponentTest extends AbstractComponentTest {
   @Qualifier("scriptParameters")
   private ScriptParameters scriptParameters;
   private final ObjectMapper mapper = new ObjectMapper();
+
+  private BrowserApp app;
 
   @BeforeEach
   public void beforeEach() {
@@ -45,12 +46,17 @@ public class DataSourceComponentTest extends AbstractComponentTest {
     } catch (Exception e) {
       fail("scriptParameters should be injected", e);
     }
-    super.openBrowser();
+
+    app = BrowserAppFactory.createBrowserAppInContainer(
+        port,
+        "/index.html",
+        "/Users/msabir/development/projects/1build-projects/1build-ui/src/test/resources/debug"
+    );
   }
 
   @AfterEach
   public void afterEach() {
-    super.closeBrowser();
+    app.destroy();
   }
 
   @Test
@@ -83,17 +89,5 @@ public class DataSourceComponentTest extends AbstractComponentTest {
 
     assertTrue(app.exists("password"));
     assertEquals("", app.getInputValue("password"));
-  }
-
-  protected String getDebugFolder() {
-    return "/Users/msabir/development/projects/1build-projects/1build-ui/src/test/resources/debug";
-  }
-
-  protected String getHomePageUrl() {
-    return "/index.html";
-  }
-
-  public int getPort() {
-    return port;
   }
 }

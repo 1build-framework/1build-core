@@ -67,6 +67,10 @@ public class ScriptService {
     StringWriter writer = new StringWriter();
 
     UiComponent cp = oneBuildUiConfigs.getComponent().getList().get(componentName);
+    if(cp == null) {
+      return "";
+    }
+
     String resourcePath = oneBuildUiConfigs.getComponent().getSourcePath() + "/" +
         cp.getHome();
 

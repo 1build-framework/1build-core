@@ -1,6 +1,7 @@
 package dev.onebuild.ui.tests.web.components;
 
-import dev.onebuild.ui.tests.web.AbstractComponentTest;
+import dev.onebuild.qa.html.api.BrowserApp;
+import dev.onebuild.qa.html.vuetify.BrowserAppFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,18 +15,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles("search")
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SearchComponentTest extends AbstractComponentTest {
+public class SearchComponentTest {
   @LocalServerPort
   private int port;
 
+  private BrowserApp app;
+
   @BeforeEach
   public void beforeEach() {
-    super.openBrowser();
+    app = BrowserAppFactory.createBrowserAppInContainer(
+        port,
+        "/index.html",
+        "/Users/msabir/development/projects/1build-projects/1build-ui/src/test/resources/debug");
   }
 
   @AfterEach
   public void afterEach() {
-    super.closeBrowser();
+    app.destroy();
   }
 
   @Test
@@ -38,17 +44,5 @@ public class SearchComponentTest extends AbstractComponentTest {
     app.click("searchButton");
 
     assertEquals("Hello, World", app.getInputValue("searchText"));
-  }
-
-  protected String getDebugFolder() {
-    return "/Users/msabir/development/projects/1build-projects/1build-ui/src/test/resources/debug";
-  }
-
-  protected String getHomePageUrl() {
-    return "/index.html";
-  }
-
-  public int getPort() {
-    return port;
   }
 }
