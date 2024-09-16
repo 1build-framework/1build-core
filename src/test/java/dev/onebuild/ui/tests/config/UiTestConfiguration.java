@@ -1,36 +1,29 @@
-package dev.onebuild.ui.config;
+package dev.onebuild.ui.tests.config;
 
 import dev.onebuild.domain.model.OneBuildComponents;
 import dev.onebuild.domain.model.OneBuildResources;
-import dev.onebuild.domain.model.ResourceType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-//@ConditionalOnProperty(value = "onebuild.ui")
-//@Configuration
-//@EnableConfigurationProperties
-public class UiApplicationConfiguration {
-
-  @Bean("appComponents")
-  @ConfigurationProperties(prefix = "onebuild.ui.app.components")
+@Configuration
+@EnableConfigurationProperties
+public class UiTestConfiguration {
+  @Bean("testComponents")
+  @ConfigurationProperties(prefix = "onebuild.ui.test.components")
   public OneBuildComponents uiComponents() {
     return new OneBuildComponents();
   }
 
-  @Bean("appServices")
-  @ConfigurationProperties(prefix = "onebuild.ui.app.services")
+  @Bean("testServices")
+  @ConfigurationProperties(prefix = "onebuild.ui.test.services")
   public OneBuildResources uiServices() {
     return new OneBuildResources();
   }
 
-  @Bean("appStores")
-  @ConfigurationProperties(prefix = "onebuild.ui.app.stores")
+  @Bean("testStores")
+  @ConfigurationProperties(prefix = "onebuild.ui.test.stores")
   public OneBuildResources uiStores() {
     return new OneBuildResources();
   }

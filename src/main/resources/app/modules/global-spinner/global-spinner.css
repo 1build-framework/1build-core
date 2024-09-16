@@ -1,0 +1,5 @@
+.global-spinner {
+    .v-overlay {
+        z-index: 2000;
+    }
+}

@@ -1,33 +1,19 @@
-<#macro cssTags path files={}>
-<#if files??>
-  <!-- CSS Links -->
-<#list files as key, value>
-  <link href="${path}/${value}" rel="stylesheet">
-</#list>
-</#if>
+
+<#macro cssTags(cssResources)>
+  <#list cssResources as resource>
+<link href="${resource}" rel="stylesheet">
+  </#list>
 </#macro>
 
-<#macro scriptTags path scripts={} modules={}>
-  <#if scripts??>
-  <!-- JS Links -->
-    <#list scripts as key, value>
-  <script type="text/javascript" src="${path}/${value}"></script>
-    </#list>
-  </#if>
-
-  <#if modules??>
-  <!-- JS Module Links -->
-    <#list modules as key, value>
-
-  <script type="module" src="${path}/${value}"></script>
-    </#list>
-  </#if>
+<#macro scriptTags(jsResources)>
+  <#list jsResources as resource>
+<script type="text/javascript" src="${resource}"></script>
+  </#list>
 </#macro>
-
 
 <#macro materialFonts>
   <!-- Fonts -->
-  <link href="/public/css/materialdesignicons.css" rel="stylesheet">
+<link href="/public/css/materialdesignicons.css" rel="stylesheet">
 </#macro>
 
 <#macro appScript>

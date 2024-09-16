@@ -7,12 +7,20 @@ server:
 
 onebuild:
   ui:
-    index:
-      main-component: datasource
-
-    component:
-      path: /app/components
-      source-path: /app/modules
-      list:
-        datasource:
-          home: /datasource
+    main-component: datasource
+    test:
+      components:
+        resource-type: COMPONENT
+        path: /app/components
+        source-path: /app/modules
+        list:
+          - name: datasource
+            home: /datasource
+      services:
+        resource-type: SERVICE
+        path: /app/services
+        source-path: /app/services
+      stores:
+        resource-type: STORE
+        path: /app/stores
+        source-path: /app/stores

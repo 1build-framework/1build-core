@@ -1,13 +1,13 @@
 onebuild:
   ui:
-    component:
-      enabled: true
-      path: /app/components
-      source-path: /app/modules
-      list:
-        app:
-          home: /app
-        about:
-          home: /about
-    index:
-      main-component: about
+    main-component: about
+    test:
+      components:
+        resource-type: COMPONENT
+        path: /app/components
+        source-path: /app/modules
+        list:
+          - name: app
+            home: /app
+          - name: about
+            home: /about

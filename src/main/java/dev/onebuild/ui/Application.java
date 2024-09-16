@@ -2,9 +2,6 @@ package dev.onebuild.ui;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.onebuild.ui.config.UiDomainConfiguration;
-import dev.onebuild.ui.config.UiTemplateConfiguration;
-import dev.onebuild.ui.domain.model.config.OneBuildUiConfigs;
 import dev.onebuild.ui.domain.model.config.ScriptParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -22,7 +19,7 @@ public class Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(
-				new Class<?>[] {OneBuildUiConfigs.class, UiTemplateConfiguration.class, UiDomainConfiguration.class, Application.class}, args);
+				new Class<?>[] { Application.class}, args);
 	}
 
 	@EventListener

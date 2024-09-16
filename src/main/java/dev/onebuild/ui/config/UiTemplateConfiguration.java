@@ -1,9 +1,11 @@
 package dev.onebuild.ui.config;
 
-import dev.onebuild.ui.domain.model.config.*;
+import dev.onebuild.domain.model.*;
+import dev.onebuild.utils.OneBuildExceptionFactory;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
+import io.micrometer.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -11,41 +13,40 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import static dev.onebuild.ui.utils.AppUtils.getComponents;
+import static dev.onebuild.ui.utils.AppUtils.getLocations;
+
+//@ConditionalOnProperty(value = "onebuild.ui")
 @Slf4j
 @Configuration
 public class UiTemplateConfiguration {
-
   @Bean("uiTemplateLoaders")
-  public List<TemplateLoader> uiTemplateLoaders(OneBuildUiConfigs oneBuildUiConfigs) {
-    IndexConfig indexConfig = oneBuildUiConfigs.getIndex();
-    ComponentsConfig componentsConfig = oneBuildUiConfigs.getComponent();
-    ServiceConfig serviceConfig = oneBuildUiConfigs.getService();
-    StoreConfig storeConfig = oneBuildUiConfigs.getStore();
-
+  public List<TemplateLoader> uiTemplateLoaders(OneBuildIndex oneBuildIndex,
+                                                List<OneBuildResources> resources,
+                                                List<OneBuildComponents> components,
+                                                OneBuildExceptionFactory exceptionFactory) {
     var templateLoaders = new ArrayList<TemplateLoader>();
 
-    //Components Classpath
-    templateLoaders.add(new ClassTemplateLoader(this.getClass(), componentsConfig.getSourcePath()));
-    log.info("Components Template Source Path: {}", componentsConfig.getSourcePath());
-
     //Index Classpath
-    templateLoaders.add(new ClassTemplateLoader(this.getClass(), indexConfig.getSourcePath()));
-    if(!indexConfig.getSourcePath().equalsIgnoreCase(indexConfig.getTemplateSourcePath())) {
-      templateLoaders.add(new ClassTemplateLoader(this.getClass(), indexConfig.getTemplateSourcePath()));
-    }
-    log.info("Index Template Source Path: {}", indexConfig.getSourcePath());
+    log.info("Index Path {}, Source Path: {}", oneBuildIndex.getPath(), oneBuildIndex.getSourcePath());
+    templateLoaders.add(new ClassTemplateLoader(this.getClass(), oneBuildIndex.getSourcePath()));
 
-    //Service Classpath
-    if(serviceConfig != null) {
-      templateLoaders.add(new ClassTemplateLoader(this.getClass(), serviceConfig.getSourcePath()));
-      log.info("Service Template Source Path: {}", serviceConfig.getSourcePath());
-    }
-    //Store Classpath
-    if(storeConfig != null) {
-      templateLoaders.add(new ClassTemplateLoader(this.getClass(), storeConfig.getSourcePath()));
-      log.info("Store Template Source Path: {}", storeConfig.getSourcePath());
-    }
+    //All resources
+    Map<String, String> resourceMappings = getLocations(resources, null, exceptionFactory);
+    resourceMappings.forEach((path, sourcePath) -> {
+      log.info("Resource Path {}, Source Path: {}", path, sourcePath);
+      templateLoaders.add(new ClassTemplateLoader(this.getClass(), sourcePath));
+    });
+
+    //All components
+    Map<String, String> componentMappings = getComponents(components, exceptionFactory);
+    componentMappings.forEach((path, sourcePath) -> {
+      log.info("Components Path {}, Source Path: {}", path, sourcePath);
+      templateLoaders.add(new ClassTemplateLoader(this.getClass(), sourcePath));
+    });
 
     return templateLoaders;
   }

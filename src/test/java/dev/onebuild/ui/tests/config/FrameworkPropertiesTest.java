@@ -1,52 +1,70 @@
 package dev.onebuild.ui.tests.config;
 
-import dev.onebuild.ui.domain.model.config.*;
+import dev.onebuild.domain.model.OneBuildAppSettings;
+import dev.onebuild.domain.model.OneBuildIndex;
+import dev.onebuild.domain.model.OneBuildResources;
+import dev.onebuild.domain.model.ResourceType;
+import dev.onebuild.ui.config.UiPropertiesConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Import({ OneBuildAppSettings.class, UiTestConfiguration.class})
 @ActiveProfiles("test")
 public class FrameworkPropertiesTest {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(FrameworkPropertiesTest.class);
+  @Autowired
+  private List<OneBuildResources> resources;
 
   @Autowired
-  private OneBuildUiConfigs oneBuildUiConfigs;
+  private OneBuildIndex oneBuildIndex;
 
   @Test
   public void testCssConfigProperties() {
-    CssConfig cssConfig = oneBuildUiConfigs.getCss();
+    List<OneBuildResources> cssLocations = resources.stream()
+        .filter(resource -> resource.getResourceType() == ResourceType.CSS)
+        .collect(Collectors.toList());
+    assertNotNull(cssLocations);
+    assertFalse(cssLocations.isEmpty());
+    OneBuildResources cssConfig = cssLocations.get(0);
     assertNotNull(cssConfig);
     assertEquals("/libs/css", cssConfig.getPath());
     assertEquals("/internal/ui/css", cssConfig.getSourcePath());
-    assertEquals(2, cssConfig.getFiles().size());
-    assertEquals("vuetify-css-3.7.0.css", cssConfig.getFiles().get(ResourceName.VUETIFY.toString()));
-    assertEquals("onebuild.css", cssConfig.getFiles().get(ResourceName.DEFAULT.toString()));
+    assertEquals(2, cssConfig.getResources().size());
+    assertEquals("vuetify-css-3.7.0.css", cssConfig.getResources().get(0));
+    assertEquals("onebuild.css", cssConfig.getResources().get(1));
   }
 
   @Test
   public void testJsConfigProperties() {
-    JsConfig jsConfig = oneBuildUiConfigs.getJs();
-    assertNotNull(jsConfig);
+    List<OneBuildResources> jsConfigs = resources.stream()
+        .filter(resource -> resource.getResourceType() == ResourceType.JS)
+        .collect(Collectors.toList());
+    assertNotNull(jsConfigs);
+    assertFalse(jsConfigs.isEmpty());
+    OneBuildResources jsConfig = jsConfigs.get(0);
     assertEquals("/libs/js", jsConfig.getPath());
     assertEquals("/internal/ui/js", jsConfig.getSourcePath());
-    assertEquals(5, jsConfig.getJavascript().size());
-    assertEquals("vue-3.4.38.js", jsConfig.getJavascript().get(ResourceName.VUE.toString()));
-    assertEquals("vue-router-4.4.3.js", jsConfig.getJavascript().get(ResourceName.VUE_ROUTER.toString()));
-    assertEquals("vuetify-3.7.0.js", jsConfig.getJavascript().get(ResourceName.VUETIFY.toString()));
-    assertEquals("pinia-2.2.2.js", jsConfig.getJavascript().get(ResourceName.PINIA.toString()));
+    assertEquals(5, jsConfig.getResources().size());
+    assertEquals("vue-3.4.38.js", jsConfig.getResources().get(0));
+    assertEquals("vuedemi-2.2.2.js", jsConfig.getResources().get(1));
+    assertEquals("vuetify-3.7.0.js", jsConfig.getResources().get(2));
+    assertEquals("vue-router-4.4.3.js", jsConfig.getResources().get(3));
+    assertEquals("pinia-2.2.2.js", jsConfig.getResources().get(4));
   }
 
   @Test
   public void testIndexConfigProperties() {
-    IndexConfig indexConfig = oneBuildUiConfigs.getIndex();
-    assertNotNull(indexConfig);
-    assertEquals("/index.html", indexConfig.getPath());
-    assertEquals("/internal/ui/templates", indexConfig.getSourcePath());
-    assertEquals("/internal/ui/templates", indexConfig.getTemplateSourcePath());
-    assertEquals("index.ftl", indexConfig.getTemplate());
+    assertNotNull(oneBuildIndex);
+    assertEquals("/index.html", oneBuildIndex.getPath());
+    assertEquals("/internal/ui/templates", oneBuildIndex.getSourcePath());
+    assertEquals("index.html.ftl", oneBuildIndex.getTemplate());
   }
 }

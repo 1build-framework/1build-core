@@ -4,5 +4,5 @@ const { defineStore } = Pinia;
 
 // Define and export the store
 export default defineStore('versionStore', {
-  state: () => (${storeData})
+  state: () => JSON.parse(`${storeData}`)
 });

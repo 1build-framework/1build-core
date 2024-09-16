@@ -1,6 +1,7 @@
 package dev.onebuild.ui.web;
 
-import dev.onebuild.ui.domain.model.config.OneBuildUiConfigs;
+import dev.onebuild.domain.model.OneBuildAppSettings;
+import dev.onebuild.domain.model.OneBuildIndex;
 import dev.onebuild.ui.domain.service.ScriptService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -9,25 +10,25 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import static dev.onebuild.ui.utils.ResourceUtils.readResource;
-
 @Slf4j
-@Controller
-public class ScriptController {
 
-  private final OneBuildUiConfigs oneBuildUiConfigs;
+public class ScriptController {
+  private final OneBuildAppSettings oneBuildAppSettings;
+  private final OneBuildIndex oneBuildIndex;
   private final ScriptService scriptService;
 
-  public ScriptController(OneBuildUiConfigs oneBuildUiConfigs,
+  public ScriptController(OneBuildAppSettings oneBuildAppSettings,
+                          OneBuildIndex oneBuildIndex,
                           ScriptService scriptService) {
-    this.oneBuildUiConfigs = oneBuildUiConfigs;
+    this.oneBuildAppSettings = oneBuildAppSettings;
+    this.oneBuildIndex = oneBuildIndex;
     this.scriptService = scriptService;
+
   }
 
-  @GetMapping(value = "#{@oneBuildUiConfigs.getIndex().getPath()}", produces = MediaType.TEXT_HTML_VALUE)
+  /*@GetMapping(value = "#{@oneBuildIndex.getPath()}", produces = MediaType.TEXT_HTML_VALUE)
   @ResponseBody
   public ResponseEntity<String> index() {
     HttpHeaders headers = new HttpHeaders();
@@ -36,14 +37,18 @@ public class ScriptController {
         .status(HttpStatus.OK)
         .headers(headers)
         .body(scriptService.renderIndex());
-  }
+  }*/
+}
 
-  @GetMapping(value = "#{@oneBuildUiConfigs.getCss().getPath()}/{cssName}", produces = "text/css")
+
+
+
+/*@GetMapping(value = "#{@oneBuildUiConfigs.getCss().getPath()}/{cssName}", produces = "text/css")
   @ResponseBody
   public ResponseEntity<String> css(@PathVariable String cssName) {
     return ResponseEntity
         .status(HttpStatus.OK)
-        .body(readResource(oneBuildUiConfigs.isProdEnabled(), oneBuildUiConfigs.getCss().getSourcePath(), cssName));
+        .body(readResource(oneBuildUiConfigs.isProdEnabled(), oneBuildUiConfigs.getCss().get(), cssName));
   }
 
   @GetMapping(value = "#{@oneBuildUiConfigs.getJs().getPath()}/{jsName}", produces = "text/javascript")
@@ -76,5 +81,4 @@ public class ScriptController {
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(scriptService.renderStore(storeName));
-  }
-}
+  }*/

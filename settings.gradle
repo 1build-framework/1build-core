@@ -1,1 +1,4 @@
 rootProject.name = '1build-ui'
+
+includeBuild '../1build-commons'
+includeBuild '../1build-qa'

@@ -1,38 +1,59 @@
 package dev.onebuild.ui.tests.config;
 
-import dev.onebuild.ui.domain.model.config.ComponentsConfig;
-import dev.onebuild.ui.domain.model.config.IndexConfig;
-import dev.onebuild.ui.domain.model.config.OneBuildUiConfigs;
+import dev.onebuild.domain.model.OneBuildAppSettings;
+import dev.onebuild.domain.model.OneBuildComponents;
+import dev.onebuild.ui.config.UiPropertiesConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Import( {
+    OneBuildAppSettings.class,
+    UiTestConfiguration.class
+})
 @ActiveProfiles("test")
 public class ComponentPropertiesTest {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ComponentPropertiesTest.class);
 
   @Autowired
-  private OneBuildUiConfigs oneBuildUiConfigs;
+  private List<OneBuildComponents> components;
+
+  @Autowired
+  private OneBuildAppSettings appSettings;
+
 
   @Test
   public void testComponentsConfigProperties() {
-    ComponentsConfig componentsConfig = oneBuildUiConfigs.getComponent();
-    IndexConfig indexConfig = oneBuildUiConfigs.getIndex();
 
-    assertNotNull(componentsConfig);
-    assertEquals("about", indexConfig.getMainComponent());
-    assertEquals("/app/components", componentsConfig.getPath());
-    assertEquals("/app/modules", componentsConfig.getSourcePath());
-    assertEquals(2, componentsConfig.getList().size());
+    assertNotNull(components);
+    assertEquals(2, components.size());
 
-    var app = componentsConfig.getList().get("app");
+    assertEquals("about", appSettings.getMainComponent());
+
+    OneBuildComponents uiComponents = this.components.get(0);
+    assertEquals("/app/components", uiComponents.getPath());
+    assertEquals("/app/modules", uiComponents.getSourcePath());
+    assertEquals(2, uiComponents.getList().size());
+
+    var app = uiComponents.getList().stream()
+        .filter(c -> c.getName().equalsIgnoreCase("app"))
+        .findFirst()
+        .orElseThrow(() -> new RuntimeException("Main component not found"));
+
+    //var app = uiComponents.getList().get("app");
     assertEquals("/app", app.getHome());
 
-    var about = componentsConfig.getList().get("about");
+    var about = uiComponents.getList().stream()
+        .filter(c -> c.getName().equalsIgnoreCase("about"))
+        .findFirst()
+        .orElseThrow(() -> new RuntimeException("Main component not found"));
+
     assertEquals("/about", about.getHome());
   }
 }

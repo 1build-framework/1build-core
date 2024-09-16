@@ -1,9 +1,14 @@
 package dev.onebuild.ui.tests.domain.service;
 
+import dev.onebuild.domain.model.OneBuildAppSettings;
+import dev.onebuild.ui.config.*;
 import dev.onebuild.ui.domain.service.ScriptService;
+import dev.onebuild.ui.tests.config.UiTestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -11,6 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @SpringBootTest
+@Import( {
+    OneBuildAppSettings.class,
+    UiTestConfiguration.class
+})
 @ActiveProfiles("test")
 public class ScriptServiceTest {
   private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ScriptServiceTest.class);
@@ -39,6 +48,14 @@ public class ScriptServiceTest {
 
     //Import
     assertTrue(page.contains("/app/components/about"));
+
+    //Scripts
+    assertTrue(page.contains("Vue.createApp(App)"));
+    assertTrue(page.contains("Pinia.createPinia()"));
+    assertTrue(page.contains("Vuetify.createVuetify()"));
+    assertTrue(page.contains("app.use(pinia)"));
+    assertTrue(page.contains("app.use(vuetify)"));
+    assertTrue(page.contains("app.mount('#onebuild-app')"));
   }
 
   @Test

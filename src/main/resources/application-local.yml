@@ -4,18 +4,34 @@ spring:
 
 onebuild:
   ui:
-    component:
+    main-component: datasource
+
+  app:
+    components:
+      resource-type: COMPONENT
       path: /app/components
       source-path: /app/modules
       list:
-        datasource:
+        - name: datasource
           home: /datasource
-        version:
-          home: /version
 
-    store:
+    stores:
+      resource-type: STORE
       path: /app/stores
       source-path: /app/stores
 
-    index:
-      main-component: version
+    services:
+      resource-type: SERVICE
+      path: /app/services
+      source-path: /app/services
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.web.servlet: DEBUG

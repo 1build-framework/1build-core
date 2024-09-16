@@ -10,13 +10,12 @@
   <!--link rel="icon" type="image/x-icon" href="favicon.ico"-->
 
   <@macros.materialFonts/>
-
-  <@macros.cssTags path=cssConfig.path files=cssConfig.files />
+  <@macros.cssTags cssResources=cssResources />
 </head>
 
 <body>
 
-<@macros.scriptTags path=jsConfig.path scripts=jsConfig.javascript modules=jsConfig.modules/>
+<@macros.scriptTags jsResources=jsResources/>
 
 <@macros.appScript/>
 

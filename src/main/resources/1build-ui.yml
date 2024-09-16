@@ -19,43 +19,50 @@
 #vuedemi 0.14.10
 #wget --output-document=vuedemi-2.2.2.js https://cdnjs.cloudflare.com/ajax/libs/vue-demi/0.14.10/index.iife.min.js --header="Accept-Charset: utf-8"
 onebuild:
-  prod-enabled: false
+  production:
+    enabled: false
 
   ui:
-    css:
-      path: /libs/css
-      source-path: /internal/ui/css
-      files:
-        vuetify: vuetify-css-3.7.0.css
-        default: onebuild.css
+    core:
+      css:
+        resource-type: CSS
+        source-path: /internal/ui/css
+        path: /libs/css
+        resources:
+          - vuetify-css-3.7.0.css
+          - onebuild.css
 
-    js:
-      path: /libs/js
-      source-path: /internal/ui/js
+      js:
+        resource-type: JS
+        source-path: /internal/ui/js
+        path: /libs/js
+        resources:
+          - vue-3.4.38.js
+          - vuedemi-2.2.2.js
+          - vuetify-3.7.0.js
+          - vue-router-4.4.3.js
+          - pinia-2.2.2.js
 
-#      modules:
-#        vue: vue-esm-3.4.38-runtime.min.prod.js
-#        vue-router: vue-router-esm-4.4.3.min.prod.js
-#        vuetify: vuetify-esm-3.7.0-runtime.min.prod.js
-#        pinia: pinia-esm-min-2.2.2.min.prod.js
+      index:
+        resource-type: INDEX
+        path: /index.html
+        source-path: /internal/ui/templates
+        template: index.html.ftl
 
-      javascript:
-        vue: vue-3.4.38.js
-        vuedemi: vuedemi-2.2.2.js
-        vue-router: vue-router-4.4.3.js
-        vuetify: vuetify-3.7.0.js
-        pinia: pinia-2.2.2.js
+      services:
+        resource-type: SERVICE
+        path: /app/services
+        source-path: /app/services
 
-    service:
-      path: /app/services
-      source-path: /app/services
+      stores:
+        resource-type: STORE
+        path: /app/stores
+        source-path: /app/stores
 
-    store:
-      path: /app/stores
-      source-path: /app/stores
-
-    index:
-      path: /index.html
-      source-path: /internal/ui/templates
-      template-source-path: /internal/ui/templates
-      template: index.ftl
+      components:
+        resource-type: COMPONENT
+        path: /app/components
+        source-path: /app/modules
+        list:
+          - name: version
+            home: /version

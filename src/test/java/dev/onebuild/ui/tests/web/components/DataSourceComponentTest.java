@@ -1,11 +1,14 @@
 package dev.onebuild.ui.tests.web.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.onebuild.domain.model.OneBuildAppSettings;
 import dev.onebuild.qa.html.api.BrowserApp;
 import dev.onebuild.qa.html.api.IdValue;
 import dev.onebuild.qa.html.api.MultiValueData;
 import dev.onebuild.qa.html.vuetify.BrowserAppFactory;
+import dev.onebuild.ui.config.*;
 import dev.onebuild.ui.domain.model.config.ScriptParameters;
+import dev.onebuild.ui.tests.config.UiTestConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +28,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
+@Import({ OneBuildAppSettings.class,
+    UiTestConfiguration.class
+})
 public class DataSourceComponentTest {
   private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DataSourceComponentTest.class);
 

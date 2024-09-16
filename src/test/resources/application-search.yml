@@ -7,11 +7,17 @@ server:
 
 onebuild:
   ui:
-    index:
-      main-component: search
-    component:
-      path: /app/components
-      source-path: /app/modules
-      list:
-        search:
-          home: /search
+    main-component: search
+    test:
+      css:
+        - path: /app/css
+          source-path: /app/css
+          resources:
+            - search.css
+      components:
+        resource-type: COMPONENT
+        path: /app/components
+        source-path: /app/modules
+        list:
+          - name: search
+            home: /search
