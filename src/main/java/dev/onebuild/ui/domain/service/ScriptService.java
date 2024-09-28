@@ -1,7 +1,7 @@
 package dev.onebuild.ui.domain.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.onebuild.domain.model.*;
+import dev.onebuild.domain.model.ui.*;
 import dev.onebuild.ui.domain.model.config.ScriptParameters;
 import dev.onebuild.utils.OneBuildExceptionFactory;
 import freemarker.core.InvalidReferenceException;
@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import static dev.onebuild.ui.utils.AppUtils.toJson;
 import static dev.onebuild.ui.utils.ResourceUtils.readResource;
+import static dev.onebuild.ui.utils.ResourceUtils.sortResources;
 
 @Slf4j
 public class ScriptService {
@@ -69,11 +70,12 @@ public class ScriptService {
               .map(res -> resource.getPath() + "/" + res))
           .collect(Collectors.toSet());
 
-      Set<String> jsResources = resources.stream()
+      List<String> jsResources = resources.stream()
           .filter(resource -> resource.getResourceType() == ResourceType.JS)
           .flatMap(resource -> resource.getResources().stream()
               .map(res -> resource.getPath() + "/" + res))
-          .collect(Collectors.toSet());
+          .collect(Collectors.toList());
+      sortResources(jsResources);
 
       Map<String, Object> model = scriptParameters.getAllParameters();
       model.putAll(Map.of(

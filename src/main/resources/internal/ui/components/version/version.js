@@ -1,6 +1,6 @@
 "use strict"
 
-import useVersionStore from '/app/stores/version-store.js';
+import useVersionStore from '/internal/ui/stores/version-store.js';
 
 const { computed } = Vue;
 

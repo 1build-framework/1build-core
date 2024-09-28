@@ -1,10 +1,9 @@
 package dev.onebuild.ui.tests.config;
 
 import dev.onebuild.domain.model.OneBuildAppSettings;
-import dev.onebuild.domain.model.OneBuildIndex;
-import dev.onebuild.domain.model.OneBuildResources;
-import dev.onebuild.domain.model.ResourceType;
-import dev.onebuild.ui.config.UiPropertiesConfiguration;
+import dev.onebuild.domain.model.ui.OneBuildIndex;
+import dev.onebuild.domain.model.ui.OneBuildResources;
+import dev.onebuild.domain.model.ui.ResourceType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -52,7 +51,7 @@ public class FrameworkPropertiesTest {
     OneBuildResources jsConfig = jsConfigs.get(0);
     assertEquals("/libs/js", jsConfig.getPath());
     assertEquals("/internal/ui/js", jsConfig.getSourcePath());
-    assertEquals(5, jsConfig.getResources().size());
+    assertEquals(6, jsConfig.getResources().size());
     assertEquals("vue-3.4.38.js", jsConfig.getResources().get(0));
     assertEquals("vuedemi-2.2.2.js", jsConfig.getResources().get(1));
     assertEquals("vuetify-3.7.0.js", jsConfig.getResources().get(2));
@@ -64,7 +63,7 @@ public class FrameworkPropertiesTest {
   public void testIndexConfigProperties() {
     assertNotNull(oneBuildIndex);
     assertEquals("/index.html", oneBuildIndex.getPath());
-    assertEquals("/internal/ui/templates", oneBuildIndex.getSourcePath());
+    assertEquals("/internal/ui/index", oneBuildIndex.getSourcePath());
     assertEquals("index.html.ftl", oneBuildIndex.getTemplate());
   }
 }

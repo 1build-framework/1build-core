@@ -1,15 +1,11 @@
 package dev.onebuild.ui.config;
 
-import dev.onebuild.domain.model.OneBuildComponents;
-import dev.onebuild.domain.model.OneBuildIndex;
-import dev.onebuild.domain.model.OneBuildLocation;
-import dev.onebuild.domain.model.OneBuildResources;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import dev.onebuild.domain.model.ui.OneBuildComponents;
+import dev.onebuild.domain.model.ui.OneBuildIndex;
+import dev.onebuild.domain.model.ui.OneBuildLocation;
+import dev.onebuild.domain.model.ui.OneBuildResources;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 public class UiPropertiesConfiguration {

@@ -1,16 +1,9 @@
 package dev.onebuild.ui.web;
 
 import dev.onebuild.domain.model.OneBuildAppSettings;
-import dev.onebuild.domain.model.OneBuildIndex;
+import dev.onebuild.domain.model.ui.OneBuildIndex;
 import dev.onebuild.ui.domain.service.ScriptService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
 

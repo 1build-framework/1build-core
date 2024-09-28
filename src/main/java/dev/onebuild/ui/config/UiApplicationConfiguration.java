@@ -1,16 +1,9 @@
 package dev.onebuild.ui.config;
 
-import dev.onebuild.domain.model.OneBuildComponents;
-import dev.onebuild.domain.model.OneBuildResources;
-import dev.onebuild.domain.model.ResourceType;
+import dev.onebuild.domain.model.ui.OneBuildComponents;
+import dev.onebuild.domain.model.ui.OneBuildResources;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 //@ConditionalOnProperty(value = "onebuild.ui")
 //@Configuration
@@ -18,19 +11,19 @@ import java.util.Map;
 public class UiApplicationConfiguration {
 
   @Bean("appComponents")
-  @ConfigurationProperties(prefix = "onebuild.ui.app.components")
+  @ConfigurationProperties(prefix = "onebuild.ui.core.components")
   public OneBuildComponents uiComponents() {
     return new OneBuildComponents();
   }
 
   @Bean("appServices")
-  @ConfigurationProperties(prefix = "onebuild.ui.app.services")
+  @ConfigurationProperties(prefix = "onebuild.ui.core.services")
   public OneBuildResources uiServices() {
     return new OneBuildResources();
   }
 
   @Bean("appStores")
-  @ConfigurationProperties(prefix = "onebuild.ui.app.stores")
+  @ConfigurationProperties(prefix = "onebuild.ui.core.stores")
   public OneBuildResources uiStores() {
     return new OneBuildResources();
   }

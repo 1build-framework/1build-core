@@ -18,6 +18,10 @@
 
 #vuedemi 0.14.10
 #wget --output-document=vuedemi-2.2.2.js https://cdnjs.cloudflare.com/ajax/libs/vue-demi/0.14.10/index.iife.min.js --header="Accept-Charset: utf-8"
+
+#axios
+#wget --output-document=axios-2.2.2.js https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js --header="Accept-Charset: utf-8"
+
 onebuild:
   production:
     enabled: false
@@ -26,43 +30,45 @@ onebuild:
     core:
       css:
         resource-type: CSS
+        path: /onebuild/libs/css
         source-path: /internal/ui/css
-        path: /libs/css
         resources:
           - vuetify-css-3.7.0.css
-          - onebuild.css
 
       js:
         resource-type: JS
+        path: /onebuild/libs/js
         source-path: /internal/ui/js
-        path: /libs/js
         resources:
           - vue-3.4.38.js
           - vuedemi-2.2.2.js
           - vuetify-3.7.0.js
           - vue-router-4.4.3.js
           - pinia-2.2.2.js
+          - axios-1.7.7.js
 
       index:
         resource-type: INDEX
         path: /index.html
-        source-path: /internal/ui/templates
+        source-path: /internal/ui/index
         template: index.html.ftl
 
       services:
         resource-type: SERVICE
-        path: /app/services
-        source-path: /app/services
+        path: /onebuild/services
+        source-path: /internal/ui/services
 
       stores:
         resource-type: STORE
-        path: /app/stores
-        source-path: /app/stores
+        path: /onebuild/stores
+        source-path: /internal/ui/stores
 
       components:
         resource-type: COMPONENT
-        path: /app/components
-        source-path: /app/modules
+        path: /onebuild/components
+        source-path: /internal/ui/components
         list:
           - name: version
             home: /version
+          - name: onebuild-spinner
+            home: /onebuild-spinner

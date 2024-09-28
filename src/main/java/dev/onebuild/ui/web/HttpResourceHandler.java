@@ -1,13 +1,11 @@
 package dev.onebuild.ui.web;
 
-import dev.onebuild.domain.model.OneBuildResources;
-import dev.onebuild.domain.model.ResourceType;
+import dev.onebuild.domain.model.ui.OneBuildLocation;
+import dev.onebuild.domain.model.ui.OneBuildResources;
+import dev.onebuild.domain.model.ui.ResourceType;
 import dev.onebuild.ui.domain.service.ScriptService;
 import dev.onebuild.utils.OneBuildExceptionFactory;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -15,14 +13,14 @@ import java.util.List;
 
 import static dev.onebuild.ui.utils.ResourceUtils.readResource;
 
-public class HttpHandler {
+public class HttpResourceHandler {
 
   private final boolean prodEnabled;
   private final List<OneBuildResources> resources;
   private final OneBuildExceptionFactory exceptionFactory;
   private final ScriptService scriptService;
 
-  public HttpHandler(
+  public HttpResourceHandler(
       boolean prodEnabled,
       List<OneBuildResources> resources,
       ScriptService scriptService,
@@ -78,4 +76,5 @@ public class HttpHandler {
   public String renderIndex() {
     return scriptService.renderIndex();
   }
+
 }

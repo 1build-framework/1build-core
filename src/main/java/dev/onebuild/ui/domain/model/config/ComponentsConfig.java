@@ -1,7 +1,7 @@
 package dev.onebuild.ui.domain.model.config;
 
-import dev.onebuild.domain.model.OneBuildLocation;
-import dev.onebuild.domain.model.UiComponent;
+import dev.onebuild.domain.model.ui.OneBuildLocation;
+import dev.onebuild.domain.model.ui.UiComponent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

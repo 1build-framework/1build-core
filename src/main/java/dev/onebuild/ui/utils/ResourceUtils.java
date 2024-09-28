@@ -5,20 +5,15 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 @Slf4j
 public class ResourceUtils {
-
-  /*public static String readResource(String classpath, String resourceName) {
-    try {
-      ClassPathResource classPathResource = new ClassPathResource(classpath + "/" + resourceName);
-      byte[] dataArr = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
-      return new String(dataArr, StandardCharsets.UTF_8);
-    } catch (Exception e) {
-      log.warn(e.getMessage());
-      return "";
-    }
-  }*/
+  private static final List<String> helperList = Arrays.asList(
+      "vue", "vuedemi", "vuetify", "vue-router", "pinia", "axios"
+  );
 
   public static String readResource(boolean prodEnabled, String classpath, String resourceName) {
     try {
@@ -54,5 +49,19 @@ public class ResourceUtils {
     byte[] dataArr = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
     return new String(dataArr, StandardCharsets.UTF_8);
   }
+
+  public static void sortResources(List<String> resources) {
+    resources.sort(Comparator.comparingInt(resource -> {
+      // Find the index in helperList based on the prefix of the resource name
+      for (int i = 0; i < helperList.size(); i++) {
+        if (resource.startsWith(helperList.get(i))) {
+          return i;
+        }
+      }
+      // If not found in helperList, put it at the end
+      return Integer.MAX_VALUE;
+    }));
+  }
+
 
 }

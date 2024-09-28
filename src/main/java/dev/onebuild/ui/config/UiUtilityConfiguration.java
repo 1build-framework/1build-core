@@ -1,12 +1,9 @@
 package dev.onebuild.ui.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import dev.onebuild.utils.OneBuildExceptionFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -15,22 +12,6 @@ import java.util.Map;
 
 @Configuration
 public class UiUtilityConfiguration {
-
-  @Primary
-  @Bean("mapper")
-  public ObjectMapper mapper() {
-    return new ObjectMapper();
-  }
-
-  @Bean("yamlMapper")
-  public YAMLMapper yamlMapper() {
-    return new YAMLMapper();
-  }
-
-  @Bean
-  public OneBuildExceptionFactory exceptionFactory(YAMLMapper yamlMapper) {
-    return new OneBuildExceptionFactory(yamlMapper);
-  }
 
   @Bean
   public static OneBuildCoreConfigs coreConfigs(@Qualifier("yamlMapper") YAMLMapper yamlMapper) {

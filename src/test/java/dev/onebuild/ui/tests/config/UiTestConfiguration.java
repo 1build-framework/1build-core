@@ -1,7 +1,7 @@
 package dev.onebuild.ui.tests.config;
 
-import dev.onebuild.domain.model.OneBuildComponents;
-import dev.onebuild.domain.model.OneBuildResources;
+import dev.onebuild.domain.model.ui.OneBuildComponents;
+import dev.onebuild.domain.model.ui.OneBuildResources;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

@@ -1,19 +1,16 @@
 package dev.onebuild.ui.tests.domain.service;
 
 import dev.onebuild.domain.model.OneBuildAppSettings;
-import dev.onebuild.ui.config.*;
 import dev.onebuild.ui.domain.service.ScriptService;
 import dev.onebuild.ui.tests.config.UiTestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 
 @SpringBootTest
 @Import( {
@@ -45,6 +42,9 @@ public class ScriptServiceTest {
     assertTrue(page.contains("/libs/js/vue-3.4.38.js"));
     assertTrue(page.contains("/libs/js/vue-router-4.4.3.js"));
     assertTrue(page.contains("/libs/js/vuetify-3.7.0.js"));
+    assertTrue(page.contains("/libs/js/vuedemi-2.2.2.js"));
+    assertTrue(page.contains("/libs/js/pinia-2.2.2.js"));
+    assertTrue(page.contains("/libs/js/axios-1.7.7.js"));
 
     //Import
     assertTrue(page.contains("/app/components/about"));

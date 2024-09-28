@@ -1,8 +1,7 @@
 package dev.onebuild.ui.tests.config;
 
 import dev.onebuild.domain.model.OneBuildAppSettings;
-import dev.onebuild.domain.model.OneBuildComponents;
-import dev.onebuild.ui.config.UiPropertiesConfiguration;
+import dev.onebuild.domain.model.ui.OneBuildComponents;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Import( {
+@Import({
     OneBuildAppSettings.class,
     UiTestConfiguration.class
 })

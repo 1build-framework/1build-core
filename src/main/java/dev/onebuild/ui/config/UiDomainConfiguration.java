@@ -1,13 +1,15 @@
 package dev.onebuild.ui.config;
 
 import dev.onebuild.domain.model.*;
+import dev.onebuild.domain.model.ui.OneBuildComponents;
+import dev.onebuild.domain.model.ui.OneBuildIndex;
+import dev.onebuild.domain.model.ui.OneBuildResources;
+import dev.onebuild.domain.model.ui.ResourceType;
 import dev.onebuild.ui.domain.model.config.ScriptParameters;
 import dev.onebuild.ui.domain.service.ScriptService;
 import dev.onebuild.utils.OneBuildExceptionFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,11 +52,9 @@ public class UiDomainConfiguration {
     final var libVersions = new HashMap<String, Object>();
     resources.stream()
         .filter(resource -> resource.getResourceType() == ResourceType.JS)
-        .forEach(jsResource -> {
-          jsResource.getResources().forEach(value -> {
-            libVersions.put(getName(value), getVersion(value));
-          });
-        });
+        .forEach(jsResource ->
+          jsResource.getResources().forEach(value -> libVersions.put(getName(value), getVersion(value)))
+        );
     libVersions.put("spring-boot", "3.3.2");
 
     var appInfo = new HashMap<String, Object>();
