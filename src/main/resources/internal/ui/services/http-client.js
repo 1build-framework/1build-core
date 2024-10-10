@@ -6,7 +6,7 @@ import useHttpStore from '/onebuild/stores/http-store.js';
 
 export const httpClient = axios.create({
   baseURL: `/`,
-  timeout: 60000
+  timeout: 120000
 });
 
 

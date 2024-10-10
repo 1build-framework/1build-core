@@ -7,7 +7,7 @@ import dev.onebuild.domain.model.ui.OneBuildResources;
 import dev.onebuild.domain.model.ui.ResourceType;
 import dev.onebuild.ui.domain.model.config.ScriptParameters;
 import dev.onebuild.ui.domain.service.ScriptService;
-import dev.onebuild.utils.OneBuildExceptionFactory;
+import dev.onebuild.errors.OneBuildExceptionFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;

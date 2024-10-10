@@ -1,8 +1,17 @@
 "use strict"
 
 import { httpClient } from '/onebuild/services/http-client.js';
+import useHttpStore from '/onebuild/stores/http-store.js';
 
 class HttpDatabaseService {
+  defaultMessages = [
+    { name: "findById", message: "Data not found" },
+    { name: "findAll", message: "Data not found" },
+    { name: "save", message: "Data saved successfully" },
+    { name: "updateById", message: "Data updated successfully" },
+    { name: "deleteById", message: "Data deleted successfully" }
+  ];
+
   constructor() {
     if (!HttpDatabaseService.instance) {
       HttpDatabaseService.instance = this;
@@ -15,52 +24,88 @@ class HttpDatabaseService {
       const response = await httpClient.get(path, {
         params: { id }
       });
-      return response.data;
+      return this.processResponse("findById", response);
     } catch (error) {
       console.error('Error finding record by ID:', error);
-      throw error;
+      return this.processResponse("findById", error);
     }
   }
 
   async findAll(path) {
     try {
       const response = await httpClient.get(path);
-      return response.data;
+      return this.processResponse("findAll", response);
     } catch (error) {
       console.error('Error finding all records:', error);
-      throw error;
+      return this.processResponse("findAll", error);
     }
   }
 
   async save(path, record) {
     try {
-      const response = await httpClient.post(path, record);
-      return response.data;
+      let response;
+      if (record.id) {
+        response = await httpClient.put(path + '/' + id, record);
+      } else {
+        response = await httpClient.post(path, record);
+      }
+      return this.processResponse("save", response);
     } catch (error) {
-      console.error('Error saving record:', error);
-      throw error;
-    }
-  }
-
-  async updateById(path, id, record) {
-    try {
-      const response = await httpClient.put(path + '/' + id, record);
-      return response.data;
-    } catch (error) {
-      console.error('Error updating record by ID:', error);
-      throw error;
+      return this.processResponse("save", error);
     }
   }
 
   async deleteById(path, id) {
     try {
       const response = await httpClient.delete(path + '/' + id);
-      return response.data;
+      return this.processResponse("deleteById", response);
     } catch (error) {
-      console.error('Error deleting record by ID:', error);
-      throw error;
+      return this.processResponse("deleteById", error);
     }
   }
+
+  async processResponse(operation, response) {
+    const httpStore = useHttpStore(); // Assuming httpStore is globally accessible
+
+    try {
+      let { status, data } = response;
+
+      if (status >= 200 && status < 300) {
+        if (data) {
+          if(Array.isArray(data) && data.length === 0) {
+            console.log("Empty results");
+            httpStore.setInfo(this.defaultMessages.find(m => m.name === operation).message);
+          }
+          return data;
+        } else {
+          httpStore.setInfo(this.defaultMessages.find(m => m.name === operation).message);
+          return null;
+        }
+      } else if (status === 401 || status === 403) {
+        // Authentication/Authorization issues
+        httpStore.setError("Authentication error. Please login.");
+        console.log("Authentication error:", response);
+      } else if (status === 400 || status === 500) {
+        if(response && response.response) {
+          data = response.response.data;
+          // Error responses
+          if (data && data.message) {
+            httpStore.setError(data.message);
+            if (data.details) {
+              console.error("Error details:", data.details);
+            }
+          } else {
+            httpStore.setError("An unknown error occurred.");
+          }
+        } else {
+          httpStore.setError("No error response was found.");
+        }
+      }
+    } catch (error) {
+      httpStore.setError("A client error occurred while processing the response.");
+    }
+  }
+
 }
 
 const httpDatabaseService = new HttpDatabaseService();

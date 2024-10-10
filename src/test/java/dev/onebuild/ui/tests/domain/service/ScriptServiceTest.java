@@ -36,7 +36,6 @@ public class ScriptServiceTest {
     //css
     assertTrue(page.contains("/public/css/materialdesignicons.css"));
     assertTrue(page.contains("/libs/css/vuetify-css-3.7.0.css"));
-    assertTrue(page.contains("/libs/css/onebuild.css"));
 
     //js
     assertTrue(page.contains("/libs/js/vue-3.4.38.js"));

@@ -19,23 +19,23 @@ public class UiPropertiesConfiguration {
     return oneBuildCoreConfigs.getCss();
   }
 
-  @Bean
+  @Bean("uiCoreIndex")
   public OneBuildIndex uiIndex(OneBuildCoreConfigs oneBuildCoreConfigs) {
     return oneBuildCoreConfigs.getIndex();
   }
 
   //Not framework but default services and stores
-  @Bean("uiCoreService")
+  @Bean("uiCoreServices")
   public OneBuildLocation uiCoreService(OneBuildCoreConfigs oneBuildCoreConfigs) {
     return oneBuildCoreConfigs.getServices();
   }
 
-  @Bean("uiCoreStore")
+  @Bean("uiCoreStores")
   public OneBuildLocation uiCoreStore(OneBuildCoreConfigs oneBuildCoreConfigs) {
     return oneBuildCoreConfigs.getStores();
   }
 
-  @Bean
+  @Bean("uiCoreComponents")
   public OneBuildComponents uiComponents(OneBuildCoreConfigs oneBuildCoreConfigs) {
     return oneBuildCoreConfigs.getComponents();
   }

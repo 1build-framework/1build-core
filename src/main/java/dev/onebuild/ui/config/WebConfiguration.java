@@ -6,7 +6,7 @@ import dev.onebuild.ui.domain.service.ScriptService;
 import dev.onebuild.ui.web.HttpDatabaseHandler;
 import dev.onebuild.ui.web.HttpResourceHandler;
 import dev.onebuild.ui.web.OneBuildEndpointRegistrar;
-import dev.onebuild.utils.OneBuildExceptionFactory;
+import dev.onebuild.errors.OneBuildExceptionFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -52,5 +52,4 @@ public class WebConfiguration {
         httpDatabaseHandler,
         exceptionFactory);
   }
-
 }

@@ -34,11 +34,10 @@ public class FrameworkPropertiesTest {
     assertFalse(cssLocations.isEmpty());
     OneBuildResources cssConfig = cssLocations.get(0);
     assertNotNull(cssConfig);
-    assertEquals("/libs/css", cssConfig.getPath());
+    assertEquals("/onebuild/libs/css", cssConfig.getPath());
     assertEquals("/internal/ui/css", cssConfig.getSourcePath());
-    assertEquals(2, cssConfig.getResources().size());
+    assertEquals(1, cssConfig.getResources().size());
     assertEquals("vuetify-css-3.7.0.css", cssConfig.getResources().get(0));
-    assertEquals("onebuild.css", cssConfig.getResources().get(1));
   }
 
   @Test
@@ -49,7 +48,7 @@ public class FrameworkPropertiesTest {
     assertNotNull(jsConfigs);
     assertFalse(jsConfigs.isEmpty());
     OneBuildResources jsConfig = jsConfigs.get(0);
-    assertEquals("/libs/js", jsConfig.getPath());
+    assertEquals("/onebuild/libs/js", jsConfig.getPath());
     assertEquals("/internal/ui/js", jsConfig.getSourcePath());
     assertEquals(6, jsConfig.getResources().size());
     assertEquals("vue-3.4.38.js", jsConfig.getResources().get(0));

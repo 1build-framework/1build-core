@@ -72,3 +72,5 @@ onebuild:
             home: /version
           - name: onebuild-spinner
             home: /onebuild-spinner
+          - name: onebuild-table
+            home: /onebuild-table

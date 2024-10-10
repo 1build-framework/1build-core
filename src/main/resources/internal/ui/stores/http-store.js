@@ -5,8 +5,10 @@ const { defineStore } = Pinia;
 const useHttpStore = defineStore('httpStore', {
   state: () => ({
     loadingCount: 0,
-    errorMessage: ''
+    message: null,
+    show: false
   }),
+
   actions: {
     startLoading() {
       this.loadingCount++;
@@ -19,11 +21,18 @@ const useHttpStore = defineStore('httpStore', {
     },
 
     setError(message) {
-      this.errorMessage = message;
+      this.show = true;
+      this.message = message;
+    },
+
+    setInfo(message) {
+      this.show = false;
+      this.message = message;
     },
 
     clearError() {
-      this.errorMessage = '';
+      this.show = false;
+      this.message = null;
     },
 
     getLoadingCount() {

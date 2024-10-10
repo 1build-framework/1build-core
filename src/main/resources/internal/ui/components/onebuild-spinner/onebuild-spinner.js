@@ -13,5 +13,30 @@ export default {
     };
   },
 
-  template: `${html}`
+  template: `
+    <v-overlay
+      :model-value="httpStore.isLoading"
+      class="align-center justify-center">
+      <v-progress-circular
+        color="primary"
+        size="64"
+        indeterminate>
+      </v-progress-circular>
+    </v-overlay>
+    
+    <v-snackbar
+      v-model="httpStore.show"
+      multi-line>
+      {{ httpStore.message }}
+      <template v-slot:actions>
+        <v-btn
+          color="red"
+          variant="text"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+`
 }

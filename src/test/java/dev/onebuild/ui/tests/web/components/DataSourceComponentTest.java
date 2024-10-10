@@ -6,7 +6,6 @@ import dev.onebuild.qa.html.api.BrowserApp;
 import dev.onebuild.qa.html.api.IdValue;
 import dev.onebuild.qa.html.api.MultiValueData;
 import dev.onebuild.qa.html.vuetify.BrowserAppFactory;
-import dev.onebuild.ui.config.*;
 import dev.onebuild.ui.domain.model.config.ScriptParameters;
 import dev.onebuild.ui.tests.config.UiTestConfiguration;
 import org.junit.jupiter.api.AfterEach;
@@ -18,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
 

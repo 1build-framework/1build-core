@@ -20,21 +20,21 @@ public class HttpDatabaseHandler {
   }
 
   @ResponseBody
-  public OneBuildRecord findById(HttpServletRequest request, @RequestParam("id") Long id) {
+  public ResponseEntity<OneBuildRecord> findById(HttpServletRequest request, @RequestParam("id") Long id) {
     if(oneBuildDataService == null) {
       return null;
     }
     var path = request.getRequestURI();
-    return oneBuildDataService.findById(path, id);
+    return ResponseEntity.ok(oneBuildDataService.findById(path, id));
   }
 
   @ResponseBody
-  public List<OneBuildRecord> findAll(HttpServletRequest request) {
+  public ResponseEntity<List<OneBuildRecord>> findAll(HttpServletRequest request) {
     if(oneBuildDataService == null) {
       return null;
     }
     var path = request.getRequestURI();
-    return oneBuildDataService.findAll(path);
+    return ResponseEntity.ok(oneBuildDataService.findAll(path));
   }
 
   @ResponseBody

@@ -3,7 +3,7 @@ package dev.onebuild.ui.domain.service;
 import dev.onebuild.domain.model.*;
 import dev.onebuild.domain.model.ui.*;
 import dev.onebuild.ui.domain.model.config.ScriptParameters;
-import dev.onebuild.utils.OneBuildExceptionFactory;
+import dev.onebuild.errors.OneBuildExceptionFactory;
 import freemarker.core.InvalidReferenceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;

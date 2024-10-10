@@ -2,7 +2,7 @@ package dev.onebuild.ui.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.onebuild.domain.model.ui.*;
-import dev.onebuild.utils.OneBuildExceptionFactory;
+import dev.onebuild.errors.OneBuildExceptionFactory;
 import io.micrometer.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

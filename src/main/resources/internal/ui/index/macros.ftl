@@ -23,12 +23,19 @@
 
 <!-- Vue wiring and configuration -->
 <script type="module">
-  import useHttpStore from '/onebuild/stores/http-store.js';
-  import onebuildSpinner from '/onebuild/components/onebuild-spinner';
+  const App = {
+    name: 'App',
 
-  import App from '${componentImportPath}';
+    setup() {
+      const Main = Vue.defineAsyncComponent(() => import('${componentImportPath}'));
+      const OneBuildSpinner = Vue.defineAsyncComponent(() => import('/onebuild/components/onebuild-spinner'));
 
-  //const httpStore = useHttpStore();
+      return () => [
+        Vue.h(Main),
+        Vue.h(OneBuildSpinner)
+      ];
+    }
+  };
 
   const app = Vue.createApp(App);
   const pinia = Pinia.createPinia();

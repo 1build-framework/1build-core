@@ -1,7 +1,7 @@
 package dev.onebuild.ui.config;
 
 import dev.onebuild.domain.model.ui.*;
-import dev.onebuild.utils.OneBuildExceptionFactory;
+import dev.onebuild.errors.OneBuildExceptionFactory;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
@@ -17,13 +17,11 @@ import java.util.Map;
 import static dev.onebuild.ui.utils.AppUtils.getComponents;
 import static dev.onebuild.ui.utils.AppUtils.getLocations;
 
-//@ConditionalOnProperty(value = "onebuild.ui")
 @Slf4j
 @Configuration
 public class UiTemplateConfiguration {
   @Bean("uiTemplateLoaders")
   public List<TemplateLoader> uiTemplateLoaders(OneBuildIndex oneBuildIndex,
-                                                List<OneBuildComponents> components,
                                                 List<OneBuildLocation> locations,
                                                 OneBuildExceptionFactory exceptionFactory) {
     var templateLoaders = new ArrayList<TemplateLoader>();
@@ -32,23 +30,12 @@ public class UiTemplateConfiguration {
     log.info("Index Path {}, Source Path: {}", oneBuildIndex.getPath(), oneBuildIndex.getSourcePath());
     templateLoaders.add(new ClassTemplateLoader(this.getClass(), oneBuildIndex.getSourcePath()));
 
-/*
-    //Javascript resources
-    Map<String, String> javascriptMappings = getLocations(resources, ResourceType.JS, exceptionFactory);
-    javascriptMappings.forEach((path, sourcePath) -> {
-      log.info("Javascript Path {}, Source Path: {}", path, sourcePath);
-      templateLoaders.add(new ClassTemplateLoader(this.getClass(), sourcePath));
-    });
-
-    //Javascript resources
-    Map<String, String> javascriptMappings = getLocations(resources, ResourceType.JS, exceptionFactory);
-    javascriptMappings.forEach((path, sourcePath) -> {
-      log.info("Javascript Path {}, Source Path: {}", path, sourcePath);
-      templateLoaders.add(new ClassTemplateLoader(this.getClass(), sourcePath));
-    });
-*/
-
     //All components
+    List<OneBuildComponents> components = locations.stream()
+        .filter(location -> location instanceof OneBuildComponents)
+        .filter(location -> location.getResourceType() == ResourceType.COMPONENT)
+        .map(location -> (OneBuildComponents) location)
+        .toList();
     Map<String, String> componentMappings = getComponents(components, exceptionFactory);
     componentMappings.forEach((path, sourcePath) -> {
       log.info("Components Path {}, Source Path: {}", path, sourcePath);
