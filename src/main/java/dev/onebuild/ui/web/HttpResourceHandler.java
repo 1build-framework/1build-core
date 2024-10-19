@@ -12,6 +12,12 @@ import java.util.List;
 
 import static dev.onebuild.ui.utils.ResourceUtils.readResource;
 
+/*
+  * This class handles HTTP requests for resources.
+  * It reads the requested resource and returns it as a string.
+  * The resources are read from the source path.
+  * This handler is called from the endpoint which is created dynamically in the class OneBuildEndpointRegistrar.
+ */
 public class HttpResourceHandler {
 
   private final boolean prodEnabled;
@@ -36,7 +42,7 @@ public class HttpResourceHandler {
 
     OneBuildResources location = resources.stream()
         .filter(resource -> resource.getResourceType() == ResourceType.CSS)
-        .filter(css -> path.startsWith(css.getPath()))
+        .filter(css -> path.startsWith(css.getWebPath()))
         .findFirst()
         .orElseThrow(() -> exceptionFactory.createMissingConfigException(path));
 
@@ -49,7 +55,7 @@ public class HttpResourceHandler {
 
     OneBuildResources location = resources.stream()
         .filter(resource -> resource.getResourceType() == ResourceType.JS)
-        .filter(js -> path.startsWith(js.getPath()))
+        .filter(js -> path.startsWith(js.getWebPath()))
         .findFirst()
         .orElseThrow(() -> exceptionFactory.createMissingConfigException(path));
 
@@ -57,18 +63,16 @@ public class HttpResourceHandler {
   }
 
   @ResponseBody
-  public String renderComponent(@PathVariable(name = "componentName") String componentName) {
-    return scriptService.renderComponent(componentName);
+  public String renderScript(HttpServletRequest request, @PathVariable(name = "scriptName") String scriptName) {
+    String requestUri = request.getRequestURI();
+    String contextPath = requestUri.substring(0, requestUri.lastIndexOf(scriptName) - 1);
+
+    return scriptService.renderScript(contextPath, scriptName);
   }
 
   @ResponseBody
-  public String renderService(@PathVariable(name = "serviceName") String serviceName) {
-    return scriptService.renderService(serviceName);
-  }
-
-  @ResponseBody
-  public String renderStore(@PathVariable(name = "storeName") String storeName) {
-    return scriptService.renderStore(storeName);
+  public String renderValidator() {
+    return scriptService.renderValidator();
   }
 
   @ResponseBody

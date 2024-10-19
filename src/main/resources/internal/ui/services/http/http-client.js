@@ -1,6 +1,6 @@
 "use strict"
 
-import useHttpStore from '/onebuild/stores/http-store.js';
+import useHttpStore from '/onebuild/stores/http-store';
 
 
 

@@ -2,7 +2,7 @@
 
 const { ref } = Vue;
 
-import datasourceService from "/app/services/datasource-service.js";
+import datasourceService from "/app/services/datasource/datasource-service";
 export default {
 
   name: 'Datasource',

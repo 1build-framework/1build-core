@@ -1,7 +1,7 @@
 package dev.onebuild.ui.tests.config;
 
 import dev.onebuild.domain.model.OneBuildAppSettings;
-import dev.onebuild.domain.model.ui.OneBuildComponents;
+import dev.onebuild.domain.model.ui.OneBuildScripts;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ComponentPropertiesTest {
 
   @Autowired
-  private List<OneBuildComponents> components;
+  private List<OneBuildScripts> components;
 
   @Autowired
   private OneBuildAppSettings appSettings;
@@ -31,12 +31,12 @@ public class ComponentPropertiesTest {
   public void testComponentsConfigProperties() {
 
     assertNotNull(components);
-    assertEquals(2, components.size());
+    assertEquals(4, components.size());
 
     assertEquals("about", appSettings.getMainComponent());
 
-    OneBuildComponents uiComponents = this.components.get(0);
-    assertEquals("/app/components", uiComponents.getPath());
+    OneBuildScripts uiComponents = this.components.get(0);
+    assertEquals("/app/components", uiComponents.getWebPath());
     assertEquals("/app/modules", uiComponents.getSourcePath());
     assertEquals(2, uiComponents.getList().size());
 

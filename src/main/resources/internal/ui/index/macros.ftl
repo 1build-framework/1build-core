@@ -23,6 +23,8 @@
 
 <!-- Vue wiring and configuration -->
 <script type="module">
+  import router from '/app/routers/router';
+
   const App = {
     name: 'App',
 
@@ -43,6 +45,7 @@
 
   app.use(pinia);
   app.use(vuetify);
+  app.use(router);
   app.mount('#onebuild-app');
 </script>
 </#macro>

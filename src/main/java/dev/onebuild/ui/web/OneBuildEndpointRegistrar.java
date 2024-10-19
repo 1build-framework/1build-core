@@ -1,31 +1,24 @@
 package dev.onebuild.ui.web;
 
 import dev.onebuild.domain.model.ui.*;
-import dev.onebuild.errors.OneBuildExceptionFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-import static dev.onebuild.ui.utils.AppUtils.*;
+import static dev.onebuild.ui.utils.AppUtils.getEndpoints;
+import static dev.onebuild.ui.utils.ResourceUtils.findResources;
 
 @Slf4j
 public class OneBuildEndpointRegistrar {
-
-  private final OneBuildExceptionFactory exceptionFactory;
-
   private final OneBuildIndex oneBuildIndex;
-
-  private final List<OneBuildResources> resources;
+  private final OneBuildValidator oneBuildValidator;
   private final List<OneBuildLocation> locations;
-
-  private final List<OneBuildComponents> components;
-
   private final List<OneBuildEndpoint> endpoints;
   private final RequestMappingHandlerMapping handlerMapping;
 
@@ -33,227 +26,222 @@ public class OneBuildEndpointRegistrar {
   private final HttpDatabaseHandler httpDatabaseHandler;
 
   public OneBuildEndpointRegistrar(OneBuildIndex oneBuildIndex,
-                                   List<OneBuildResources> resources,
+                                   OneBuildValidator oneBuildValidator,
                                    List<OneBuildLocation> locations,
-                                   List<OneBuildComponents> components,
                                    List<OneBuildEndpoint> endpoints,
                                    RequestMappingHandlerMapping handlerMapping,
                                    HttpResourceHandler httpResourceHandler,
-                                   HttpDatabaseHandler httpDatabaseHandler,
-                                   OneBuildExceptionFactory exceptionFactory) {
+                                   HttpDatabaseHandler httpDatabaseHandler) {
     this.oneBuildIndex = oneBuildIndex;
-    this.resources = resources;
+    this.oneBuildValidator = oneBuildValidator;
     this.locations = locations;
-    this.components = components;
     this.endpoints = endpoints;
     this.handlerMapping = handlerMapping;
     this.httpResourceHandler = httpResourceHandler;
     this.httpDatabaseHandler = httpDatabaseHandler;
-    this.exceptionFactory = exceptionFactory;
-  }
-
-  private void initResources(Method method, ResourceType resourceType, String name, RequestMethod requestMethod, String contentType) {
-    log.debug("Initializing endpoint for {} with method {}", resourceType, method.getName());
-    Map<String, String> resourcePaths = getLocations(resources, resourceType, exceptionFactory);
-    initResources(method, resourcePaths, name, requestMethod, contentType);
-  }
-
-  private void initLocations(Method method, ResourceType resourceType, String name, RequestMethod requestMethod, String contentType) {
-    log.debug("Initializing endpoint for {} with method {}", resourceType, method.getName());
-    Map<String, String> resourcePaths = getLocations(locations, resourceType);
-    initResources(method, resourcePaths, name, requestMethod, contentType);
-  }
-
-  private void initResources(Method method, Map<String, String> resourcePaths, String name, RequestMethod requestMethod, String contentType) {
-    log.debug("Initializing endpoint for method {}", method.getName());
-    resourcePaths.forEach((path, sourcePath) -> {
-      log.debug("Resource endpoint {} for Source: {}", path, sourcePath);
-      handlerMapping.registerMapping(
-          RequestMappingInfo
-              .paths(path + name)
-              .methods(requestMethod)
-              .produces(contentType)
-              .build(),
-          httpResourceHandler,
-          method
-      );
-    });
   }
 
   public void init() throws Exception {
-    //css controller method
-    Method renderResourceMethod = httpResourceHandler.getClass().getMethod("renderCssResource", HttpServletRequest.class, String.class);
-    initResources(renderResourceMethod, ResourceType.CSS, "/{cssName}", RequestMethod.GET, "text/css");
-
-    //js controller method
-    renderResourceMethod = httpResourceHandler.getClass().getMethod("renderJsResource", HttpServletRequest.class, String.class);
-    initResources(renderResourceMethod, ResourceType.JS, "/{jsName}", RequestMethod.GET, "text/javascript");
-
-    //component controller method
-    renderResourceMethod = httpResourceHandler.getClass().getMethod("renderComponent", String.class);
-    Map<String, String> componentPaths = getComponents(components, exceptionFactory);
-    initResources(renderResourceMethod, componentPaths, "/{componentName}", RequestMethod.GET, "text/javascript");
-
-    //service controller method
-    renderResourceMethod = httpResourceHandler.getClass().getMethod("renderService", String.class);
-    initLocations(renderResourceMethod, ResourceType.SERVICE, "/{serviceName}", RequestMethod.GET, "text/javascript");
-
-    //store controller method
-    renderResourceMethod = httpResourceHandler.getClass().getMethod("renderStore", String.class);
-    initLocations(renderResourceMethod, ResourceType.STORE, "/{storeName}", RequestMethod.GET, "text/javascript");
-
-    //index controller method
-    Method renderIndexMethod = httpResourceHandler.getClass().getMethod("renderIndex");
-    log.debug("INDEX endpoint {} for Source: {}", oneBuildIndex.getPath(), oneBuildIndex.getSourcePath());
-    handlerMapping.registerMapping(
-      RequestMappingInfo
-          .paths(oneBuildIndex.getPath())
-          .methods(RequestMethod.GET)
-          .produces("text/html")
-          .build(),
-        httpResourceHandler,
-      renderIndexMethod
-    );
+    initApplicationEndpoints();
     initDatabaseEndpoints();
+  }
+
+  private void initApplicationEndpoints() {
+    //CSS
+    findResources(locations, ResourceType.CSS).forEach(location -> {
+      log.debug("Registering endpoint {}", location.getWebPath());
+      try {
+        handlerMapping.registerMapping(
+            RequestMappingInfo
+                .paths(location.getWebPath() + "/{cssName}")
+                .methods(RequestMethod.GET)
+                .produces("text/css")
+                .build(),
+            httpResourceHandler,
+            httpResourceHandler.getClass().getMethod("renderCssResource", HttpServletRequest.class, String.class));
+      } catch (Exception e) {
+        log.error("Error while registering CSS endpoint", e);
+      }
+    });
+
+    //JS
+    findResources(locations, ResourceType.JS).forEach(location -> {
+      log.debug("Registering endpoint {}", location.getWebPath());
+      try {
+        handlerMapping.registerMapping(
+            RequestMappingInfo
+                .paths(location.getWebPath() + "/{jsName}")
+                .methods(RequestMethod.GET)
+                .produces("text/javascript")
+                .build(),
+            httpResourceHandler,
+            httpResourceHandler.getClass().getMethod("renderJsResource", HttpServletRequest.class, String.class));
+      } catch (Exception e) {
+        log.error("Error while registering CSS endpoint", e);
+      }
+    });
+
+    //INDEX
+    log.debug("INDEX endpoint {} for Source: {}", oneBuildIndex.getWebPath(), oneBuildIndex.getSourcePath());
+    try {
+      handlerMapping.registerMapping(
+          RequestMappingInfo
+              .paths(oneBuildIndex.getWebPath())
+              .methods(RequestMethod.GET)
+              .produces("text/html")
+              .build(),
+          httpResourceHandler,
+          httpResourceHandler.getClass().getMethod("renderIndex"));
+    } catch (Exception e) {
+      log.error("Error while registering INDEX endpoint", e);
+    }
+
+    //SCRIPT
+    findResources(locations, ResourceType.SCRIPT).forEach(location -> {
+      log.debug("Registering endpoint {}", location.getWebPath());
+      try {
+        handlerMapping.registerMapping(
+            RequestMappingInfo
+                .paths(location.getWebPath() + "/{scriptName}")
+                .methods(RequestMethod.GET)
+                .produces("text/javascript")
+                .build(),
+            httpResourceHandler,
+            httpResourceHandler.getClass().getMethod("renderScript", HttpServletRequest.class, String.class));
+      } catch (Exception e) {
+        log.error("Error while registering SCRIPT endpoint", e);
+      }
+    });
+
+    //VALIDATOR
+    if(oneBuildValidator != null) {
+      log.debug("VALIDATOR endpoint {}", oneBuildValidator.getWebPath());
+      try {
+        handlerMapping.registerMapping(
+            RequestMappingInfo
+                .paths(oneBuildValidator.getWebPath())
+                .methods(RequestMethod.GET)
+                .produces("text/javascript")
+                .build(),
+            httpResourceHandler,
+            httpResourceHandler.getClass().getMethod("renderValidator"));
+      } catch (Exception e) {
+        log.error("Error while registering INDEX endpoint", e);
+      }
+    }
+
+    /*//SERVICE
+    findResources(locations, ResourceType.SERVICE).forEach(location -> {
+      log.debug("Registering endpoint {}", location.getWebPath());
+      try {
+        handlerMapping.registerMapping(
+            RequestMappingInfo
+                .paths(location.getWebPath() + "/{serviceName}")
+                .methods(RequestMethod.GET)
+                .produces("text/javascript")
+                .build(),
+            httpResourceHandler,
+            httpResourceHandler.getClass().getMethod("renderService", HttpServletRequest.class, String.class));
+      } catch (Exception e) {
+        log.error("Error while registering COMPONENT endpoint", e);
+      }
+    });
+
+    //STORE
+    findResources(locations, ResourceType.STORE).forEach(location -> {
+      log.debug("Registering endpoint {}", location.getWebPath());
+      try {
+        handlerMapping.registerMapping(
+            RequestMappingInfo
+                .paths(location.getWebPath() + "/{storeName}")
+                .methods(RequestMethod.GET)
+                .produces("text/javascript")
+                .build(),
+            httpResourceHandler,
+            httpResourceHandler.getClass().getMethod("renderStore", HttpServletRequest.class, String.class));
+      } catch (Exception e) {
+        log.error("Error while registering COMPONENT endpoint", e);
+      }
+    });*/
   }
 
   private void initDatabaseEndpoints() throws Exception {
     for(OneBuildEndpoint endpoint : getEndpoints(endpoints)) {
-      log.debug("Initializing endpoint for {}", endpoint.getPath());
+      log.debug("Initializing endpoint for {}", endpoint.getWebPath());
 
+/*
       //FIND_BY_ID
-      Method findByIdMethod = httpDatabaseHandler.getClass().getMethod("findById", HttpServletRequest.class, Long.class);
+      log.debug("Registering endpoint Method {}, URL {}", RequestMethod.GET, endpoint.getWebPath() + "/{id}");
       handlerMapping.registerMapping(
           RequestMappingInfo
-              .paths(endpoint.getPath() + "/{id}")
+              .paths(endpoint.getWebPath() + "/{id}")
               .methods(RequestMethod.GET)
               .produces("application/json")
               .build(),
           httpDatabaseHandler,
-          findByIdMethod
+          httpDatabaseHandler.getClass().getMethod("findById", HttpServletRequest.class, Long.class)
       );
+*/
 
-      //FIND_ALL
-      Method findAllMethod = httpDatabaseHandler.getClass().getMethod("findAll", HttpServletRequest.class);
+      //FIND
+      log.debug("Registering endpoint Method {}, URL {}", RequestMethod.GET, endpoint.getWebPath());
       handlerMapping.registerMapping(
           RequestMappingInfo
-              .paths(endpoint.getPath())
+              .paths(endpoint.getWebPath())
               .methods(RequestMethod.GET)
               .produces("application/json")
               .build(),
           httpDatabaseHandler,
-          findAllMethod
+          httpDatabaseHandler.getClass().getMethod("find", HttpServletRequest.class, MultiValueMap.class)
       );
 
       //INSERT_ONE
-      Method saveMethod = httpDatabaseHandler.getClass().getMethod("save", HttpServletRequest.class, Map.class);
+      log.debug("Registering endpoint Method {}, URL {}", RequestMethod.POST, endpoint.getWebPath());
       handlerMapping.registerMapping(
           RequestMappingInfo
-              .paths(endpoint.getPath())
+              .paths(endpoint.getWebPath())
               .methods(RequestMethod.POST)
               .produces("application/json")
               .build(),
           httpDatabaseHandler,
-          saveMethod
+          httpDatabaseHandler.getClass().getMethod("create", HttpServletRequest.class, Map.class)
       );
 
       //UPDATE_BY_ID
-      Method updateMethod = httpDatabaseHandler.getClass().getMethod("updateById", HttpServletRequest.class, Long.class, Map.class);
+      log.debug("Registering endpoint Method {}, URL {}", RequestMethod.PUT, endpoint.getWebPath() + "/{id}");
       handlerMapping.registerMapping(
           RequestMappingInfo
-              .paths(endpoint.getPath() + "/{id}")
+              .paths(endpoint.getWebPath() + "/{id}")
               .methods(RequestMethod.PUT)
               .produces("application/json")
               .build(),
           httpDatabaseHandler,
-          updateMethod
+          httpDatabaseHandler.getClass().getMethod("updateById", HttpServletRequest.class, Long.class, Map.class)
       );
 
       //DELETE_BY_ID
-      Method deleteById = httpDatabaseHandler.getClass().getMethod("deleteById", HttpServletRequest.class, Long.class);
+      log.debug("Registering endpoint Method {}, URL {}", RequestMethod.DELETE, endpoint.getWebPath() + "/{id}");
       handlerMapping.registerMapping(
           RequestMappingInfo
-              .paths(endpoint.getPath() + "/{id}")
+              .paths(endpoint.getWebPath() + "/{id}")
               .methods(RequestMethod.DELETE)
               .produces("application/json")
               .build(),
           httpDatabaseHandler,
-          deleteById
+          httpDatabaseHandler.getClass().getMethod("deleteById", HttpServletRequest.class, Long.class)
+      );
+
+      //DELETE
+      log.debug("Registering endpoint Method {}, URL {}", RequestMethod.DELETE, endpoint.getWebPath());
+      handlerMapping.registerMapping(
+          RequestMappingInfo
+              .paths(endpoint.getWebPath())
+              .methods(RequestMethod.DELETE)
+              .produces("application/json")
+              .build(),
+          httpDatabaseHandler,
+          httpDatabaseHandler.getClass().getMethod("delete", HttpServletRequest.class, String.class)
       );
     }
   }
 }
-
-
-    /*Map<String, String> jsPaths = getLocations(resources, ResourceType.JS, exceptionFactory);
-    jsPaths.forEach((jsPath, sourcePath) -> {
-      log.debug("JS endpoint {} for Source: {}", jsPath, sourcePath);
-      handlerMapping.registerMapping(
-        RequestMappingInfo
-            .paths(jsPath + "/{jsName}")
-            .methods(RequestMethod.GET)
-            .produces("text/javascript")
-            .build(),
-        httpResourceHandler,
-        renderJsResourceMethod
-      );
-    });
-    Map<String, String> cssPaths = getLocations(resources, ResourceType.CSS, exceptionFactory);
-    cssPaths.forEach((path, sourcePath) -> {
-      log.debug("CSS endpoint {} for Source: {}", path, sourcePath);
-      handlerMapping.registerMapping(
-          RequestMappingInfo
-              .paths(path + "/{cssName}")
-              .methods(RequestMethod.GET)
-              .produces("text/css")
-              .build(),
-          httpResourceHandler,
-          renderResourceMethod
-      );
-    });
-
-    Method renderComponentMethod = httpResourceHandler.getClass().getMethod("renderComponent", String.class);
-    Map<String, String> componentPaths = getComponents(components, exceptionFactory);
-    componentPaths.forEach((componentPath, sourcePath) -> {
-      log.debug("COMPONENT endpoint {} for Source: {}", componentPath, sourcePath);
-      handlerMapping.registerMapping(
-        RequestMappingInfo
-            .paths(componentPath + "/{componentName}")
-            .methods(RequestMethod.GET)
-            .produces("text/javascript")
-            .build(),
-        httpResourceHandler,
-        renderComponentMethod
-      );
-    });
-
-        Map<String, String> servicePaths = getLocations(resources, ResourceType.SERVICE, exceptionFactory);
-    servicePaths.forEach((servicePath, sourcePath) -> {
-      log.debug("SERVICE endpoint {} for Source: {}", servicePath, sourcePath);
-      handlerMapping.registerMapping(
-        RequestMappingInfo
-            .paths(servicePath + "/{serviceName}")
-            .methods(RequestMethod.GET)
-            .produces("text/javascript")
-            .build(),
-        httpResourceHandler,
-        renderServiceMethod
-      );
-    });
-
-    Method renderStoreMethod = httpResourceHandler.getClass().getMethod("renderStore", String.class);
-    Map<String, String> storePaths = getLocations(resources, ResourceType.STORE, exceptionFactory);
-    storePaths.forEach((storePath, sourcePath) -> {
-      log.debug("STORE endpoint {} for Source: {}", storePath, sourcePath);
-      handlerMapping.registerMapping(
-        RequestMappingInfo
-            .paths(storePath + "/{storeName}")
-            .methods(RequestMethod.GET)
-            .produces("text/javascript")
-            .build(),
-        httpResourceHandler,
-        renderStoreMethod
-      );
-    });
-
-*/

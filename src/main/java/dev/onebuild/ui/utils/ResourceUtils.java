@@ -1,5 +1,8 @@
 package dev.onebuild.ui.utils;
 
+import dev.onebuild.domain.model.ui.OneBuildLocation;
+import dev.onebuild.domain.model.ui.ResourceType;
+import io.micrometer.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
@@ -8,12 +11,36 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class ResourceUtils {
   private static final List<String> helperList = Arrays.asList(
       "vue", "vuedemi", "vuetify", "vue-router", "pinia", "axios"
   );
+
+  public static List<OneBuildLocation> findResources(List<OneBuildLocation> locations, ResourceType resourceType) {
+    return locations.stream()
+        .filter(location -> (resourceType == null || location.getResourceType() == resourceType))
+        .filter(location -> StringUtils.isNotBlank(location.getWebPath()) && StringUtils.isNotBlank(location.getSourcePath()))
+        .collect(Collectors.toList());
+  }
+
+  public static String readResource(String resourceName) {
+    try {
+      ClassPathResource resource = new ClassPathResource(resourceName);
+      if (resource.exists()) {
+        byte[] contents = FileCopyUtils.copyToByteArray(resource.getInputStream());
+        return new String(contents, StandardCharsets.UTF_8);
+      } else {
+        log.error("Resource {} does not exists", resourceName);
+        return "";
+      }
+    } catch (Exception e) {
+      log.error("Error reading resource " + resourceName, e.getMessage());
+      return "";
+    }
+  }
 
   public static String readResource(boolean prodEnabled, String classpath, String resourceName) {
     try {

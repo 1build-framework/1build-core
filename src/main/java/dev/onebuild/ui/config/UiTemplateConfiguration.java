@@ -1,7 +1,7 @@
 package dev.onebuild.ui.config;
 
-import dev.onebuild.domain.model.ui.*;
-import dev.onebuild.errors.OneBuildExceptionFactory;
+import dev.onebuild.domain.model.ui.OneBuildIndex;
+import dev.onebuild.domain.model.ui.OneBuildLocation;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
@@ -12,49 +12,36 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import static dev.onebuild.ui.utils.AppUtils.getComponents;
-import static dev.onebuild.ui.utils.AppUtils.getLocations;
+import static dev.onebuild.ui.utils.ResourceUtils.findResources;
 
 @Slf4j
 @Configuration
 public class UiTemplateConfiguration {
+  private static final String VALIDATOR_PATH = "/internal/ui/validator";
+
   @Bean("uiTemplateLoaders")
   public List<TemplateLoader> uiTemplateLoaders(OneBuildIndex oneBuildIndex,
-                                                List<OneBuildLocation> locations,
-                                                OneBuildExceptionFactory exceptionFactory) {
+                                                List<OneBuildLocation> locations) {
     var templateLoaders = new ArrayList<TemplateLoader>();
 
     //Index Classpath
-    log.info("Index Path {}, Source Path: {}", oneBuildIndex.getPath(), oneBuildIndex.getSourcePath());
+    log.info("Index Path {}, Source Path: {}", oneBuildIndex.getWebPath(), oneBuildIndex.getSourcePath());
     templateLoaders.add(new ClassTemplateLoader(this.getClass(), oneBuildIndex.getSourcePath()));
 
-    //All components
-    List<OneBuildComponents> components = locations.stream()
-        .filter(location -> location instanceof OneBuildComponents)
-        .filter(location -> location.getResourceType() == ResourceType.COMPONENT)
-        .map(location -> (OneBuildComponents) location)
-        .toList();
-    Map<String, String> componentMappings = getComponents(components, exceptionFactory);
-    componentMappings.forEach((path, sourcePath) -> {
-      log.info("Components Path {}, Source Path: {}", path, sourcePath);
-      templateLoaders.add(new ClassTemplateLoader(this.getClass(), sourcePath));
-    });
+    //Validator Classpath
+    log.info("Validator Path {}", VALIDATOR_PATH);
+    templateLoaders.add(new ClassTemplateLoader(this.getClass(), VALIDATOR_PATH));
 
-    //Service resources
-    Map<String, String> serviceMappings = getLocations(locations, ResourceType.SERVICE);
-    serviceMappings.forEach((path, sourcePath) -> {
-      log.info("Service Path {}, Source Path: {}", path, sourcePath);
-      templateLoaders.add(new ClassTemplateLoader(this.getClass(), sourcePath));
-    });
+    //All Locations
+    findResources(locations, null).stream()
+        .map(OneBuildLocation::getSourcePath)
+        .distinct()
+        .forEach((sourcePath) -> {
+          log.info("Registering Components Source Path: {}", sourcePath);
+          templateLoaders.add(new ClassTemplateLoader(this.getClass(), sourcePath));
+        });
 
-    //Store resources
-    Map<String, String> storeMappings = getLocations(locations, ResourceType.STORE);
-    storeMappings.forEach((path, sourcePath) -> {
-      log.info("Store Path {}, Source Path: {}", path, sourcePath);
-      templateLoaders.add(new ClassTemplateLoader(this.getClass(), sourcePath));
-    });
 
     return templateLoaders;
   }

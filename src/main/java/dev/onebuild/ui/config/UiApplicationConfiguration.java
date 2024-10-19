@@ -1,7 +1,6 @@
 package dev.onebuild.ui.config;
 
-import dev.onebuild.domain.model.ui.OneBuildComponents;
-import dev.onebuild.domain.model.ui.OneBuildResources;
+import dev.onebuild.domain.model.ui.OneBuildScripts;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
@@ -9,19 +8,19 @@ public class UiApplicationConfiguration {
 
   @Bean
   @ConfigurationProperties(prefix = "onebuild.ui.core.components")
-  public OneBuildComponents uiComponents() {
-    return new OneBuildComponents();
+  public OneBuildScripts uiComponents() {
+    return new OneBuildScripts();
   }
 
   @Bean
   @ConfigurationProperties(prefix = "onebuild.ui.core.services")
-  public OneBuildResources uiServices() {
-    return new OneBuildResources();
+  public OneBuildScripts uiServices() {
+    return new OneBuildScripts();
   }
 
   @Bean
   @ConfigurationProperties(prefix = "onebuild.ui.core.stores")
-  public OneBuildResources uiStores() {
-    return new OneBuildResources();
+  public OneBuildScripts uiStores() {
+    return new OneBuildScripts();
   }
 }

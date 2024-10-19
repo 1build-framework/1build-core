@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.util.List;
@@ -34,22 +35,18 @@ public class WebConfiguration {
 
   @Bean(name = "oneBuildEndpointRegistrar", initMethod = "init")
   public OneBuildEndpointRegistrar oneBuildEndpointRegistrar(OneBuildIndex oneBuildIndex,
-                                                             List<OneBuildResources> resources,
                                                              List<OneBuildLocation> locations,
-                                                             List<OneBuildComponents> components,
                                                              List<OneBuildEndpoint> endpoints,
+                                                             @Nullable OneBuildValidator oneBuildValidator,
                                                              @Qualifier("requestMappingHandlerMapping") RequestMappingHandlerMapping handlerMapping,
                                                              HttpResourceHandler httpResourceHandler,
-                                                             HttpDatabaseHandler httpDatabaseHandler,
-                                                             OneBuildExceptionFactory exceptionFactory) {
+                                                             HttpDatabaseHandler httpDatabaseHandler) {
     return new OneBuildEndpointRegistrar(oneBuildIndex,
-        resources,
+        oneBuildValidator,
         locations,
-        components,
         endpoints,
         handlerMapping,
         httpResourceHandler,
-        httpDatabaseHandler,
-        exceptionFactory);
+        httpDatabaseHandler);
   }
 }

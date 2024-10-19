@@ -12,11 +12,19 @@ onebuild:
     main-component: about
     test:
       components:
-        resource-type: COMPONENT
-        path: /app/components
+        resource-type: SCRIPT
+        web-path: /app/components
         source-path: /app/modules
         list:
           - name: app
             home: /app
+            pagelets:
+            - type: FILE
+              name: html
+              value: app.html
           - name: about
             home: /about
+            pagelets:
+            - type: FILE
+              name: html
+              value: about.html

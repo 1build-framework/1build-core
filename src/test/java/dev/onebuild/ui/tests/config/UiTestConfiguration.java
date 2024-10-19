@@ -1,7 +1,6 @@
 package dev.onebuild.ui.tests.config;
 
-import dev.onebuild.domain.model.ui.OneBuildComponents;
-import dev.onebuild.domain.model.ui.OneBuildResources;
+import dev.onebuild.domain.model.ui.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -12,19 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class UiTestConfiguration {
   @Bean("testComponents")
   @ConfigurationProperties(prefix = "onebuild.ui.test.components")
-  public OneBuildComponents uiComponents() {
-    return new OneBuildComponents();
+  public OneBuildScripts uiComponents() {
+    return new OneBuildScripts();
   }
 
-  @Bean("testServices")
-  @ConfigurationProperties(prefix = "onebuild.ui.test.services")
-  public OneBuildResources uiServices() {
-    return new OneBuildResources();
-  }
-
-  @Bean("testStores")
-  @ConfigurationProperties(prefix = "onebuild.ui.test.stores")
-  public OneBuildResources uiStores() {
-    return new OneBuildResources();
-  }
 }

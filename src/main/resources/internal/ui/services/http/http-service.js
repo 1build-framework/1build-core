@@ -1,7 +1,7 @@
 "use strict"
 
-import { httpClient } from '/onebuild/services/http-client.js';
-import useHttpStore from '/onebuild/stores/http-store.js';
+import { httpClient } from '/onebuild/services/http-client';
+import useHttpStore from '/onebuild/stores/http-store';
 
 class HttpDatabaseService {
   defaultMessages = [
@@ -19,9 +19,9 @@ class HttpDatabaseService {
     return HttpDatabaseService.instance;
   }
 
-  async findById(path, id) {
+  findById(path, id) {
     try {
-      const response = await httpClient.get(path, {
+      const response = httpClient.get(path, {
         params: { id }
       });
       return this.processResponse("findById", response);
@@ -31,36 +31,31 @@ class HttpDatabaseService {
     }
   }
 
-  async findAll(path) {
-    try {
-      const response = await httpClient.get(path);
-      return this.processResponse("findAll", response);
-    } catch (error) {
-      console.error('Error finding all records:', error);
-      return this.processResponse("findAll", error);
+  findAll(path, parentId) {
+    return httpClient.get(path + (parentId ? '?parentId=' + parentId : ''));
+  }
+
+  save(path, record) {
+    if (record.id) {
+      return httpClient.put(path + '/' + record.id, record);
+    } else {
+      return httpClient.post(path, record);
     }
   }
 
-  async save(path, record) {
-    try {
-      let response;
-      if (record.id) {
-        response = await httpClient.put(path + '/' + id, record);
-      } else {
-        response = await httpClient.post(path, record);
-      }
-      return this.processResponse("save", response);
-    } catch (error) {
-      return this.processResponse("save", error);
+  deleteById(path, id) {
+    if(id) {
+      return httpClient.delete(path + '/' + id);
     }
   }
 
-  async deleteById(path, id) {
-    try {
-      const response = await httpClient.delete(path + '/' + id);
-      return this.processResponse("deleteById", response);
-    } catch (error) {
-      return this.processResponse("deleteById", error);
+  delete(path, ids) {
+    if(ids) {
+      return httpClient.delete(path, {
+        headers: {
+          'X-DELETE-IDS': ids.join(',')
+        }
+      });
     }
   }
 
@@ -69,7 +64,7 @@ class HttpDatabaseService {
 
     try {
       let { status, data } = response;
-
+      console.log("Response status:", status);
       if (status >= 200 && status < 300) {
         if (data) {
           if(Array.isArray(data) && data.length === 0) {

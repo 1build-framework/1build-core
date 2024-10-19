@@ -16,7 +16,7 @@ public class UiUtilityConfiguration {
   @Bean
   public static OneBuildCoreConfigs coreConfigs(@Qualifier("yamlMapper") YAMLMapper yamlMapper) {
     Resource resource = new ClassPathResource("1build-ui.yml");
-    OneBuildCoreConfigs configs = null;
+    OneBuildCoreConfigs configs;
     try {
       Map<String, Object> yamlMap = yamlMapper.readValue(resource.getInputStream(), Map.class);
 

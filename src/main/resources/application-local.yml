@@ -9,21 +9,23 @@ onebuild:
   app:
     components:
       resource-type: COMPONENT
-      path: /app/components
+      web-path: /app/components
       source-path: /app/modules
       list:
-        - name: datasource
-          home: /datasource
+      - name: datasource
+        home: /datasource
 
     stores:
       resource-type: STORE
-      path: /app/stores
+      web-path: /app/stores
       source-path: /app/stores
+      list:
 
     services:
       resource-type: SERVICE
-      path: /app/services
+      web-path: /app/services
       source-path: /app/services
+      list:
 
 management:
   endpoints:

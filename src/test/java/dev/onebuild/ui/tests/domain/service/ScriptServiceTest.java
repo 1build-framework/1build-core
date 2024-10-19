@@ -59,7 +59,7 @@ public class ScriptServiceTest {
 
   @Test
   public void whenComponentIsCalled_itGeneratesTheScript() {
-    String componentScript = scriptService.renderComponent("app");
+    String componentScript = scriptService.renderScript("/app/components", "app");
     assertNotNull(componentScript);
     log.info("Page generated \n" + componentScript);
 

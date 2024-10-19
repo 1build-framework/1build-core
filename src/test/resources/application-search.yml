@@ -15,14 +15,18 @@ onebuild:
     main-component: search
     test:
       css:
-        - path: /app/css
+        - web-path: /app/css
           source-path: /app/css
           resources:
             - search.css
       components:
-        resource-type: COMPONENT
-        path: /app/components
+        resource-type: SCRIPT
+        web-path: /app/components
         source-path: /app/modules
         list:
           - name: search
             home: /search
+            pagelets:
+              - type: FILE
+                name: html
+                value: search.html

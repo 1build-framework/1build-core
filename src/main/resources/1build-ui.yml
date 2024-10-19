@@ -23,6 +23,7 @@
 #wget --output-document=axios-2.2.2.js https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js --header="Accept-Charset: utf-8"
 
 onebuild:
+
   production:
     enabled: false
 
@@ -30,14 +31,14 @@ onebuild:
     core:
       css:
         resource-type: CSS
-        path: /onebuild/libs/css
+        web-path: /onebuild/libs/css
         source-path: /internal/ui/css
         resources:
           - vuetify-css-3.7.0.css
 
       js:
         resource-type: JS
-        path: /onebuild/libs/js
+        web-path: /onebuild/libs/js
         source-path: /internal/ui/js
         resources:
           - vue-3.4.38.js
@@ -49,28 +50,39 @@ onebuild:
 
       index:
         resource-type: INDEX
-        path: /index.html
+        web-path: /index.html
         source-path: /internal/ui/index
         template: index.html.ftl
 
       services:
-        resource-type: SERVICE
-        path: /onebuild/services
+        resource-type: SCRIPT
+        web-path: /onebuild/services
         source-path: /internal/ui/services
+        list:
+          - name: http-client
+            home: /http
+            resource: http-client.js
+          - name: http-service
+            home: /http
+            resource: http-service.js
 
       stores:
-        resource-type: STORE
-        path: /onebuild/stores
+        resource-type: SCRIPT
+        web-path: /onebuild/stores
         source-path: /internal/ui/stores
+        list:
+          - name: http-store
+            home: /http
+            resource: http-store.js
 
       components:
-        resource-type: COMPONENT
-        path: /onebuild/components
+        resource-type: SCRIPT
+        web-path: /onebuild/components
         source-path: /internal/ui/components
         list:
           - name: version
             home: /version
+            resource: version.js
           - name: onebuild-spinner
             home: /onebuild-spinner
-          - name: onebuild-table
-            home: /onebuild-table
+            resource: onebuild-spinner.js

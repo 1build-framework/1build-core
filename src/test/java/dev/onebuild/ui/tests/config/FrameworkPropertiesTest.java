@@ -34,7 +34,7 @@ public class FrameworkPropertiesTest {
     assertFalse(cssLocations.isEmpty());
     OneBuildResources cssConfig = cssLocations.get(0);
     assertNotNull(cssConfig);
-    assertEquals("/onebuild/libs/css", cssConfig.getPath());
+    assertEquals("/onebuild/libs/css", cssConfig.getWebPath());
     assertEquals("/internal/ui/css", cssConfig.getSourcePath());
     assertEquals(1, cssConfig.getResources().size());
     assertEquals("vuetify-css-3.7.0.css", cssConfig.getResources().get(0));
@@ -48,7 +48,7 @@ public class FrameworkPropertiesTest {
     assertNotNull(jsConfigs);
     assertFalse(jsConfigs.isEmpty());
     OneBuildResources jsConfig = jsConfigs.get(0);
-    assertEquals("/onebuild/libs/js", jsConfig.getPath());
+    assertEquals("/onebuild/libs/js", jsConfig.getWebPath());
     assertEquals("/internal/ui/js", jsConfig.getSourcePath());
     assertEquals(6, jsConfig.getResources().size());
     assertEquals("vue-3.4.38.js", jsConfig.getResources().get(0));
@@ -61,7 +61,7 @@ public class FrameworkPropertiesTest {
   @Test
   public void testIndexConfigProperties() {
     assertNotNull(oneBuildIndex);
-    assertEquals("/index.html", oneBuildIndex.getPath());
+    assertEquals("/index.html", oneBuildIndex.getWebPath());
     assertEquals("/internal/ui/index", oneBuildIndex.getSourcePath());
     assertEquals("index.html.ftl", oneBuildIndex.getTemplate());
   }

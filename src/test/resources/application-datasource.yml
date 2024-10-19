@@ -15,17 +15,21 @@ onebuild:
     main-component: datasource
     test:
       components:
-        resource-type: COMPONENT
-        path: /app/components
+        resource-type: SCRIPT
+        web-path: /app/components
         source-path: /app/modules
         list:
           - name: datasource
             home: /datasource
+            pagelets:
+              - type: FILE
+                name: html
+                value: datasource.html
       services:
-        resource-type: SERVICE
-        path: /app/services
+        resource-type: SCRIPT
+        web-path: /app/services
         source-path: /app/services
-      stores:
-        resource-type: STORE
-        path: /app/stores
-        source-path: /app/stores
+        list:
+          - name: datasource-service
+            home: /datasource
+            resource: datasource-service.js
