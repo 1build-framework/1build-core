@@ -9,6 +9,7 @@
   <title>Hello 1build (Spring Boot + Vue + Vuetify)</title>
   <!--link rel="icon" type="image/x-icon" href="favicon.ico"-->
 
+  <link rel="icon" href="data:,">
   <@macros.materialFonts/>
   <@macros.cssTags cssResources=cssResources />
 </head>

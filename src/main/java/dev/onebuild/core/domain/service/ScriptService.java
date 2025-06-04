@@ -1,12 +1,10 @@
-package dev.onebuild.ui.domain.service;
+package dev.onebuild.core.domain.service;
 
-import dev.onebuild.domain.model.*;
-import dev.onebuild.domain.model.ui.*;
-import dev.onebuild.ui.domain.model.config.ScriptParameters;
-import dev.onebuild.errors.OneBuildExceptionFactory;
+import dev.onebuild.commons.domain.model.OneBuildAppSettings;
+import dev.onebuild.commons.domain.model.ui.*;
+import dev.onebuild.core.domain.model.config.ScriptParameters;
+import dev.onebuild.commons.errors.OneBuildExceptionFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 
 import java.io.StringWriter;
 import java.util.Collections;
@@ -15,8 +13,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static dev.onebuild.ui.utils.AppUtils.processPagelets;
-import static dev.onebuild.ui.utils.ResourceUtils.sortResources;
+import static dev.onebuild.core.utils.AppUtils.processPagelets;
+import static dev.onebuild.core.utils.ResourceUtils.sortResources;
 
 @Slf4j
 public class ScriptService {

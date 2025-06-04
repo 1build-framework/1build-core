@@ -1,12 +1,11 @@
-package dev.onebuild.ui.utils;
+package dev.onebuild.core.utils;
 
-import dev.onebuild.domain.model.ui.OneBuildLocation;
-import dev.onebuild.domain.model.ui.ResourceType;
+import dev.onebuild.commons.domain.model.ui.OneBuildLocation;
+import dev.onebuild.commons.domain.model.ui.ResourceType;
 import io.micrometer.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -89,6 +88,4 @@ public class ResourceUtils {
       return Integer.MAX_VALUE;
     }));
   }
-
-
 }

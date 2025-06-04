@@ -1,14 +1,13 @@
 package dev.onebuild.ui.tests.domain.service;
 
-import dev.onebuild.domain.model.OneBuildAppSettings;
-import dev.onebuild.ui.domain.service.ScriptService;
+import dev.onebuild.commons.domain.model.OneBuildAppSettings;
+import dev.onebuild.core.domain.service.ScriptService;
 import dev.onebuild.ui.tests.config.UiTestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

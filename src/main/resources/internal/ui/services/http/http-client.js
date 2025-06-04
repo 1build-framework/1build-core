@@ -9,7 +9,6 @@ export const httpClient = axios.create({
   timeout: 120000
 });
 
-
 httpClient.interceptors.request.use(request => {
   try {
     const httpStore = useHttpStore();

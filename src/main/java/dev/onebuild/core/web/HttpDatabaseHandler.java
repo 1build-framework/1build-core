@@ -1,8 +1,8 @@
-package dev.onebuild.ui.web;
+package dev.onebuild.core.web;
 
-import dev.onebuild.domain.model.db.DefaultOneBuildRecord;
-import dev.onebuild.domain.model.db.OneBuildRecord;
-import dev.onebuild.domain.service.OneBuildDataService;
+import dev.onebuild.commons.domain.model.db.DefaultOneBuildRecord;
+import dev.onebuild.commons.domain.model.db.OneBuildRecord;
+import dev.onebuild.commons.domain.service.OneBuildDataService;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,8 @@ public class HttpDatabaseHandler {
   }
 
   @ResponseBody
-  public ResponseEntity<List<OneBuildRecord>> find(HttpServletRequest request, @RequestParam MultiValueMap<String, String> params) {
+  public ResponseEntity<List<OneBuildRecord>> find(HttpServletRequest request,
+                                                   @RequestParam MultiValueMap<String, String> params) {
     if(oneBuildDataService == null) {
       return null;
     }
@@ -32,7 +33,8 @@ public class HttpDatabaseHandler {
   }
 
   @ResponseBody
-  public ResponseEntity<OneBuildRecord> create(HttpServletRequest request, @RequestBody Map<String, Object> body) {
+  public ResponseEntity<OneBuildRecord> create(HttpServletRequest request,
+                                               @RequestBody Map<String, Object> body) {
     if(oneBuildDataService == null) {
       return null;
     }
@@ -43,7 +45,9 @@ public class HttpDatabaseHandler {
   }
 
   @ResponseBody
-  public ResponseEntity<OneBuildRecord> updateById(HttpServletRequest request, @PathVariable("id") Long id, @RequestBody Map<String, Object> body) {
+  public ResponseEntity<OneBuildRecord> update(HttpServletRequest request,
+                                               @PathVariable("id") Long id,
+                                               @RequestBody Map<String, Object> body) {
     if(oneBuildDataService == null) {
       return null;
     }
@@ -56,18 +60,8 @@ public class HttpDatabaseHandler {
   }
 
   @ResponseBody
-  public ResponseEntity<?> deleteById(HttpServletRequest request, @PathVariable("id") Long id) {
-    if(oneBuildDataService == null) {
-      return null;
-    }
-    String requestUri = request.getRequestURI();
-    String contextPath = requestUri.substring(0, requestUri.lastIndexOf(id.toString()) - 1);
-    oneBuildDataService.deleteById(contextPath, requestUri, id);
-    return ResponseEntity.ok().build();
-  }
-
-  @ResponseBody
-  public ResponseEntity<?> delete(HttpServletRequest request, @RequestHeader("X-DELETE-IDS") String idsString) {
+  public ResponseEntity<?> delete(HttpServletRequest request,
+                                  @RequestHeader("X-DELETE-IDS") String idsString) {
     if(oneBuildDataService == null) {
       return null;
     }

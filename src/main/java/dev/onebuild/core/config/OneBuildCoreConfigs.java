@@ -1,7 +1,9 @@
-package dev.onebuild.ui.config;
+package dev.onebuild.core.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import dev.onebuild.domain.model.ui.*;
+import dev.onebuild.commons.domain.model.ui.OneBuildIndex;
+import dev.onebuild.commons.domain.model.ui.OneBuildResources;
+import dev.onebuild.commons.domain.model.ui.OneBuildScripts;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

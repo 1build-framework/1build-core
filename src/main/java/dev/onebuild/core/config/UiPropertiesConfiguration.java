@@ -1,6 +1,8 @@
-package dev.onebuild.ui.config;
+package dev.onebuild.core.config;
 
-import dev.onebuild.domain.model.ui.*;
+import dev.onebuild.commons.domain.model.ui.OneBuildIndex;
+import dev.onebuild.commons.domain.model.ui.OneBuildResources;
+import dev.onebuild.commons.domain.model.ui.OneBuildScripts;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

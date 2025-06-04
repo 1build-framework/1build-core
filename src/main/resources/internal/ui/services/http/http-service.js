@@ -19,20 +19,11 @@ class HttpDatabaseService {
     return HttpDatabaseService.instance;
   }
 
-  findById(path, id) {
-    try {
-      const response = httpClient.get(path, {
-        params: { id }
-      });
-      return this.processResponse("findById", response);
-    } catch (error) {
-      console.error('Error finding record by ID:', error);
-      return this.processResponse("findById", error);
-    }
-  }
-
-  findAll(path, parentId) {
-    return httpClient.get(path + (parentId ? '?parentId=' + parentId : ''));
+  find(path, parameters) {
+    console.log("Finding records with parameters:", path, parameters);
+    return httpClient.get(path, {
+      params: parameters
+    });
   }
 
   save(path, record) {

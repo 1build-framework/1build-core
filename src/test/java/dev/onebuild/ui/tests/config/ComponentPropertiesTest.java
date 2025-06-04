@@ -1,7 +1,7 @@
 package dev.onebuild.ui.tests.config;
 
-import dev.onebuild.domain.model.OneBuildAppSettings;
-import dev.onebuild.domain.model.ui.OneBuildScripts;
+import dev.onebuild.commons.domain.model.OneBuildAppSettings;
+import dev.onebuild.commons.domain.model.ui.OneBuildScripts;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

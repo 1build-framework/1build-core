@@ -1,15 +1,41 @@
 "use strict"
 
 const { defineStore } = Pinia;
-const { ref } = Vue;
+const { reactive, ref } = Vue;
 
 export default defineStore(`${storeName}`, {
   state: () => ({
     domainObjects: ref([]),
-    domainObject: reactive(${domainObject});
+    selected: ref([]),
+    domainObject: reactive(${domainObject}),
+    navigateObject: reactive({})
   }),
 
   actions: {
+
+    setNavigate(item) {
+      Object.assign(this.navigateObject, item);
+    },
+
+    resetForm() {
+      for (let key in this.domainObject) {
+        if (this.domainObject.hasOwnProperty(key)) {
+          this.domainObject[key] = null;
+        }
+      }
+    },
+
+    assignValues(source) {
+      console.log('Assigning values:', this.domainObject.value, source);
+      if(source) {
+        for (let key in source) {
+          if (source.hasOwnProperty(key) && this.domainObject.hasOwnProperty(key)) {
+            this.domainObject[key] = source[key];
+          }
+        }
+      }
+    },
+
     setAll(domainObjects) {
       this.domainObjects.value = domainObjects;
     },

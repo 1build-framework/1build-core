@@ -1,8 +1,8 @@
-package dev.onebuild.ui.web;
+package dev.onebuild.core.web;
 
-import dev.onebuild.domain.model.OneBuildAppSettings;
-import dev.onebuild.domain.model.ui.OneBuildIndex;
-import dev.onebuild.ui.domain.service.ScriptService;
+import dev.onebuild.commons.domain.model.OneBuildAppSettings;
+import dev.onebuild.commons.domain.model.ui.OneBuildIndex;
+import dev.onebuild.core.domain.service.ScriptService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

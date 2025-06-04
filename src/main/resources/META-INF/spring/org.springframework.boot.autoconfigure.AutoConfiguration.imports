@@ -1,6 +1,6 @@
-dev.onebuild.ui.config.UiUtilityConfiguration
-dev.onebuild.domain.model.OneBuildAppSettings
-dev.onebuild.ui.config.UiPropertiesConfiguration
-dev.onebuild.ui.config.UiTemplateConfiguration
-dev.onebuild.ui.config.UiDomainConfiguration
-dev.onebuild.ui.config.WebConfiguration
+dev.onebuild.core.config.UiUtilityConfiguration
+dev.onebuild.commons.domain.model.OneBuildAppSettings
+dev.onebuild.core.config.UiPropertiesConfiguration
+dev.onebuild.core.config.UiTemplateConfiguration
+dev.onebuild.core.config.UiDomainConfiguration
+dev.onebuild.core.config.WebConfiguration

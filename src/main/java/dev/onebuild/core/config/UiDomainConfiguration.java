@@ -1,21 +1,19 @@
-package dev.onebuild.ui.config;
+package dev.onebuild.core.config;
 
-import dev.onebuild.domain.model.*;
-import dev.onebuild.domain.model.ui.*;
-import dev.onebuild.ui.domain.model.config.ScriptParameters;
-import dev.onebuild.ui.domain.service.ScriptService;
-import dev.onebuild.errors.OneBuildExceptionFactory;
+import dev.onebuild.commons.domain.model.OneBuildAppSettings;
+import dev.onebuild.commons.domain.model.ui.OneBuildIndex;
+import dev.onebuild.commons.domain.model.ui.OneBuildLocation;
+import dev.onebuild.commons.domain.model.ui.OneBuildValidator;
+import dev.onebuild.core.domain.model.config.ScriptParameters;
+import dev.onebuild.core.domain.service.ScriptService;
+import dev.onebuild.commons.errors.OneBuildExceptionFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Configuration

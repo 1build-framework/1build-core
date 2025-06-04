@@ -1,7 +1,7 @@
-package dev.onebuild.ui.config;
+package dev.onebuild.core.config;
 
-import dev.onebuild.domain.model.ui.OneBuildIndex;
-import dev.onebuild.domain.model.ui.OneBuildLocation;
+import dev.onebuild.commons.domain.model.ui.OneBuildIndex;
+import dev.onebuild.commons.domain.model.ui.OneBuildLocation;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.onebuild.ui.utils.ResourceUtils.findResources;
+import static dev.onebuild.core.utils.ResourceUtils.findResources;
 
 @Slf4j
 @Configuration

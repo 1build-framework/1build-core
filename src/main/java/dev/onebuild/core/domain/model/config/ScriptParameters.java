@@ -1,4 +1,4 @@
-package dev.onebuild.ui.domain.model.config;
+package dev.onebuild.core.domain.model.config;
 
 import java.util.Map;
 import java.util.HashMap;

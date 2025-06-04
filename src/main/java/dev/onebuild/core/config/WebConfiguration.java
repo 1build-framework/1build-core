@@ -1,12 +1,12 @@
-package dev.onebuild.ui.config;
+package dev.onebuild.core.config;
 
-import dev.onebuild.domain.model.ui.*;
-import dev.onebuild.domain.service.OneBuildDataService;
-import dev.onebuild.ui.domain.service.ScriptService;
-import dev.onebuild.ui.web.HttpDatabaseHandler;
-import dev.onebuild.ui.web.HttpResourceHandler;
-import dev.onebuild.ui.web.OneBuildEndpointRegistrar;
-import dev.onebuild.errors.OneBuildExceptionFactory;
+import dev.onebuild.commons.domain.model.ui.*;
+import dev.onebuild.commons.domain.service.OneBuildDataService;
+import dev.onebuild.core.domain.service.ScriptService;
+import dev.onebuild.core.web.HttpDatabaseHandler;
+import dev.onebuild.core.web.HttpResourceHandler;
+import dev.onebuild.core.web.OneBuildEndpointRegistrar;
+import dev.onebuild.commons.errors.OneBuildExceptionFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

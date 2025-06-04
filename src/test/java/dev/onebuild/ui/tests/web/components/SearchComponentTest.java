@@ -1,6 +1,6 @@
 package dev.onebuild.ui.tests.web.components;
 
-import dev.onebuild.domain.model.OneBuildAppSettings;
+import dev.onebuild.commons.domain.model.OneBuildAppSettings;
 import dev.onebuild.qa.html.api.BrowserApp;
 import dev.onebuild.qa.html.vuetify.BrowserAppFactory;
 import dev.onebuild.ui.tests.config.UiTestConfiguration;
@@ -42,7 +42,6 @@ public class SearchComponentTest {
 
   @Test
   public void whenSearchAppStarts_itLoadsTheHomePage() {
-
     assertTrue(app.exists("searchText"));
     assertTrue(app.exists("searchButton"));
 

@@ -1,8 +1,8 @@
-package dev.onebuild.ui;
+package dev.onebuild.core;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.onebuild.ui.domain.model.config.ScriptParameters;
+import dev.onebuild.core.domain.model.config.ScriptParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

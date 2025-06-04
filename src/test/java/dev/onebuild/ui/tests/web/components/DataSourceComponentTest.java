@@ -1,12 +1,12 @@
 package dev.onebuild.ui.tests.web.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.onebuild.domain.model.OneBuildAppSettings;
+import dev.onebuild.commons.domain.model.OneBuildAppSettings;
 import dev.onebuild.qa.html.api.BrowserApp;
 import dev.onebuild.qa.html.api.IdValue;
 import dev.onebuild.qa.html.api.MultiValueData;
 import dev.onebuild.qa.html.vuetify.BrowserAppFactory;
-import dev.onebuild.ui.domain.model.config.ScriptParameters;
+import dev.onebuild.core.domain.model.config.ScriptParameters;
 import dev.onebuild.ui.tests.config.UiTestConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,9 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("datasource")

@@ -1,19 +1,18 @@
-package dev.onebuild.ui.utils;
+package dev.onebuild.core.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.onebuild.domain.model.ui.*;
-import dev.onebuild.errors.OneBuildExceptionFactory;
+import dev.onebuild.commons.domain.model.ui.*;
+import dev.onebuild.commons.errors.OneBuildExceptionFactory;
 import io.micrometer.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static dev.onebuild.ui.utils.ResourceUtils.readResource;
+import static dev.onebuild.core.utils.ResourceUtils.readResource;
 
 public class AppUtils {
   private static final Logger log = LoggerFactory.getLogger(AppUtils.class);
@@ -64,23 +63,6 @@ public class AppUtils {
             (existing, replacement) -> existing
         ));
   }
-
-/*
-  public static List<OneBuildLocation> getComponents(List<OneBuildComponents> components,
-                                                 OneBuildExceptionFactory exceptionFactory) {
-    return components.stream()
-        .filter(component -> component.getResourceType() == ResourceType.COMPONENT)
-        .filter(component -> StringUtils.isNotBlank(component.getWebPath()) && StringUtils.isNotBlank(component.getSourcePath()))
-        .filter(component -> {
-          if (component.getList().isEmpty()) {
-            throw exceptionFactory.createMissingPropertyException(component);
-          }
-          return true;
-        })
-        .map(component -> (OneBuildLocation) component)
-        .collect(Collectors.toList());
-  }
-*/
 
   public static Set<OneBuildEndpoint> getEndpoints(List<OneBuildEndpoint> endpoints) {
     return endpoints.stream()

@@ -1,4 +1,4 @@
-package dev.onebuild.ui.config;
+package dev.onebuild.core.config;
 
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import org.springframework.beans.factory.annotation.Qualifier;

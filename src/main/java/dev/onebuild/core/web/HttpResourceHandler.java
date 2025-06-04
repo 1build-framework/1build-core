@@ -1,16 +1,16 @@
-package dev.onebuild.ui.web;
+package dev.onebuild.core.web;
 
-import dev.onebuild.domain.model.ui.OneBuildResources;
-import dev.onebuild.domain.model.ui.ResourceType;
-import dev.onebuild.ui.domain.service.ScriptService;
-import dev.onebuild.errors.OneBuildExceptionFactory;
+import dev.onebuild.commons.domain.model.ui.OneBuildResources;
+import dev.onebuild.commons.domain.model.ui.ResourceType;
+import dev.onebuild.core.domain.service.ScriptService;
+import dev.onebuild.commons.errors.OneBuildExceptionFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-import static dev.onebuild.ui.utils.ResourceUtils.readResource;
+import static dev.onebuild.core.utils.ResourceUtils.readResource;
 
 /*
   * This class handles HTTP requests for resources.

@@ -1,6 +1,6 @@
-package dev.onebuild.ui.web;
+package dev.onebuild.core.web;
 
-import dev.onebuild.domain.model.ui.*;
+import dev.onebuild.commons.domain.model.ui.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.MultiValueMap;
@@ -11,8 +11,8 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.util.List;
 import java.util.Map;
 
-import static dev.onebuild.ui.utils.AppUtils.getEndpoints;
-import static dev.onebuild.ui.utils.ResourceUtils.findResources;
+import static dev.onebuild.core.utils.AppUtils.getEndpoints;
+import static dev.onebuild.core.utils.ResourceUtils.findResources;
 
 @Slf4j
 public class OneBuildEndpointRegistrar {
@@ -21,7 +21,6 @@ public class OneBuildEndpointRegistrar {
   private final List<OneBuildLocation> locations;
   private final List<OneBuildEndpoint> endpoints;
   private final RequestMappingHandlerMapping handlerMapping;
-
   private final HttpResourceHandler httpResourceHandler;
   private final HttpDatabaseHandler httpDatabaseHandler;
 
@@ -129,119 +128,67 @@ public class OneBuildEndpointRegistrar {
         log.error("Error while registering INDEX endpoint", e);
       }
     }
-
-    /*//SERVICE
-    findResources(locations, ResourceType.SERVICE).forEach(location -> {
-      log.debug("Registering endpoint {}", location.getWebPath());
-      try {
-        handlerMapping.registerMapping(
-            RequestMappingInfo
-                .paths(location.getWebPath() + "/{serviceName}")
-                .methods(RequestMethod.GET)
-                .produces("text/javascript")
-                .build(),
-            httpResourceHandler,
-            httpResourceHandler.getClass().getMethod("renderService", HttpServletRequest.class, String.class));
-      } catch (Exception e) {
-        log.error("Error while registering COMPONENT endpoint", e);
-      }
-    });
-
-    //STORE
-    findResources(locations, ResourceType.STORE).forEach(location -> {
-      log.debug("Registering endpoint {}", location.getWebPath());
-      try {
-        handlerMapping.registerMapping(
-            RequestMappingInfo
-                .paths(location.getWebPath() + "/{storeName}")
-                .methods(RequestMethod.GET)
-                .produces("text/javascript")
-                .build(),
-            httpResourceHandler,
-            httpResourceHandler.getClass().getMethod("renderStore", HttpServletRequest.class, String.class));
-      } catch (Exception e) {
-        log.error("Error while registering COMPONENT endpoint", e);
-      }
-    });*/
   }
 
   private void initDatabaseEndpoints() throws Exception {
     for(OneBuildEndpoint endpoint : getEndpoints(endpoints)) {
       log.debug("Initializing endpoint for {}", endpoint.getWebPath());
 
-/*
-      //FIND_BY_ID
-      log.debug("Registering endpoint Method {}, URL {}", RequestMethod.GET, endpoint.getWebPath() + "/{id}");
-      handlerMapping.registerMapping(
-          RequestMappingInfo
-              .paths(endpoint.getWebPath() + "/{id}")
-              .methods(RequestMethod.GET)
-              .produces("application/json")
-              .build(),
-          httpDatabaseHandler,
-          httpDatabaseHandler.getClass().getMethod("findById", HttpServletRequest.class, Long.class)
-      );
-*/
-
       //FIND
-      log.debug("Registering endpoint Method {}, URL {}", RequestMethod.GET, endpoint.getWebPath());
-      handlerMapping.registerMapping(
-          RequestMappingInfo
-              .paths(endpoint.getWebPath())
-              .methods(RequestMethod.GET)
-              .produces("application/json")
-              .build(),
-          httpDatabaseHandler,
-          httpDatabaseHandler.getClass().getMethod("find", HttpServletRequest.class, MultiValueMap.class)
-      );
+      if(endpoint.getOperations().contains(DatabaseOpType.FIND)) {
+        log.debug("Registering endpoint Method {}, URL {}", RequestMethod.GET, endpoint.getWebPath());
+        handlerMapping.registerMapping(
+            RequestMappingInfo
+                .paths(endpoint.getWebPath())
+                .methods(RequestMethod.GET)
+                .produces("application/json")
+                .build(),
+            httpDatabaseHandler,
+            httpDatabaseHandler.getClass().getMethod("find", HttpServletRequest.class, MultiValueMap.class)
+        );
+      }
 
       //INSERT_ONE
-      log.debug("Registering endpoint Method {}, URL {}", RequestMethod.POST, endpoint.getWebPath());
-      handlerMapping.registerMapping(
-          RequestMappingInfo
-              .paths(endpoint.getWebPath())
-              .methods(RequestMethod.POST)
-              .produces("application/json")
-              .build(),
-          httpDatabaseHandler,
-          httpDatabaseHandler.getClass().getMethod("create", HttpServletRequest.class, Map.class)
-      );
+      if(endpoint.getOperations().contains(DatabaseOpType.CREATE)) {
+        log.debug("Registering endpoint Method {}, URL {}", RequestMethod.POST, endpoint.getWebPath());
+        handlerMapping.registerMapping(
+            RequestMappingInfo
+                .paths(endpoint.getWebPath())
+                .methods(RequestMethod.POST)
+                .produces("application/json")
+                .build(),
+            httpDatabaseHandler,
+            httpDatabaseHandler.getClass().getMethod("create", HttpServletRequest.class, Map.class)
+        );
+      }
 
-      //UPDATE_BY_ID
-      log.debug("Registering endpoint Method {}, URL {}", RequestMethod.PUT, endpoint.getWebPath() + "/{id}");
-      handlerMapping.registerMapping(
-          RequestMappingInfo
-              .paths(endpoint.getWebPath() + "/{id}")
-              .methods(RequestMethod.PUT)
-              .produces("application/json")
-              .build(),
-          httpDatabaseHandler,
-          httpDatabaseHandler.getClass().getMethod("updateById", HttpServletRequest.class, Long.class, Map.class)
-      );
-
-      //DELETE_BY_ID
-      log.debug("Registering endpoint Method {}, URL {}", RequestMethod.DELETE, endpoint.getWebPath() + "/{id}");
-      handlerMapping.registerMapping(
-          RequestMappingInfo
-              .paths(endpoint.getWebPath() + "/{id}")
-              .methods(RequestMethod.DELETE)
-              .produces("application/json")
-              .build(),
-          httpDatabaseHandler,
-          httpDatabaseHandler.getClass().getMethod("deleteById", HttpServletRequest.class, Long.class)
-      );
+      //UPDATE
+      if(endpoint.getOperations().contains(DatabaseOpType.UPDATE)) {
+        log.debug("Registering endpoint Method {}, URL {}", RequestMethod.PUT, endpoint.getWebPath() + "/{id}");
+        handlerMapping.registerMapping(
+            RequestMappingInfo
+                .paths(endpoint.getWebPath() + "/{id}")
+                .methods(RequestMethod.PUT)
+                .produces("application/json")
+                .build(),
+            httpDatabaseHandler,
+            httpDatabaseHandler.getClass().getMethod("update", HttpServletRequest.class, Long.class, Map.class)
+        );
+      }
 
       //DELETE
-      log.debug("Registering endpoint Method {}, URL {}", RequestMethod.DELETE, endpoint.getWebPath());
-      handlerMapping.registerMapping(
-          RequestMappingInfo
-              .paths(endpoint.getWebPath())
-              .methods(RequestMethod.DELETE)
-              .produces("application/json")
-              .build(),
-          httpDatabaseHandler,
-          httpDatabaseHandler.getClass().getMethod("delete", HttpServletRequest.class, String.class)
-      );
+      if(endpoint.getOperations().contains(DatabaseOpType.DELETE)) {
+        log.debug("Registering endpoint Method {}, URL {}", RequestMethod.DELETE, endpoint.getWebPath());
+        handlerMapping.registerMapping(
+            RequestMappingInfo
+                .paths(endpoint.getWebPath())
+                .methods(RequestMethod.DELETE)
+                .produces("application/json")
+                .build(),
+            httpDatabaseHandler,
+            httpDatabaseHandler.getClass().getMethod("delete", HttpServletRequest.class, String.class)
+        );
+      }
     }
   }
 }

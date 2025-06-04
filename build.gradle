@@ -1,12 +1,25 @@
-plugins {
-	id 'maven-publish'
-	id 'java'
-	id 'org.springframework.boot' version '3.3.2'
-	id 'io.spring.dependency-management' version '1.1.6'
+buildscript {
+	ext {
+		awsAccessKey = findProperty("aws_access_key") ?: System.getenv("AWS_KEY")
+		awsSecretKey = findProperty("aws_secret_key") ?: System.getenv("AWS_SECRET")
+	}
 }
 
-group = 'dev.onebuild'
-version = '0.0.1-SNAPSHOT'
+plugins {
+	id 'java'
+	id 'maven-publish'
+	id 'org.springframework.boot' version '3.4.4'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+static def generateVersion() {
+	def date = new Date().format("yyyy-MM-dd")
+	def commitCount = "git rev-list --count HEAD".execute().text.trim()
+	return "${date}.${commitCount}"
+}
+
+group = 'dev.onebuild.core'
+version = generateVersion()
 
 java {
 	toolchain {
@@ -15,7 +28,16 @@ java {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
+
+	maven {
+		url = "s3://1build-framework/releases"
+		credentials(AwsCredentials) {
+			accessKey = awsAccessKey
+			secretKey = awsSecretKey
+		}
+	}
 }
 
 dependencies {
@@ -24,7 +46,7 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-	implementation 'dev.onebuild:1build-commons:0.0.1-SNAPSHOT'
+	implementation 'dev.onebuild.commons:1build-commons:2025-05-16.26'
 
 	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -35,10 +57,28 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
 	testImplementation 'dev.onebuild:1build-qa:0.0.1-SNAPSHOT'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+publishing {
+
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+
+	repositories {
+		maven {
+			url = "s3://1build-framework/releases/"
+			credentials(AwsCredentials) {
+				accessKey = awsAccessKey
+				secretKey = awsSecretKey
+			}
+		}
+	}
 }
